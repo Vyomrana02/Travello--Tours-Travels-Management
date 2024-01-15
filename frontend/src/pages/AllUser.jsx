@@ -1,0 +1,78 @@
+import React, { useEffect,useState } from 'react'
+import { BASE_URL } from '../utils/config'
+import {Button} from 'reactstrap'
+const AllUser = () => {
+    const [users,setusers] = useState([]);
+    useEffect(()=>{
+        async function temp(){
+            try {
+                const res = await fetch(`${BASE_URL}/users/`, {
+                    method: 'get',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    credentials: 'include',
+                })
+                const result = await res.json()
+                console.log(result)
+                setusers(result.data)
+                if (!res.ok) alert(result.message)
+                return () => { }
+            } catch (err) {
+                alert(err.message)
+            }
+        }
+        temp()
+    },[])
+    const makeAdmin = async (data) =>{
+        data.role = 'admin'
+        try{
+            const res = await fetch(`${BASE_URL}/users/${data._id}`, {
+                method:'put',
+                headers: {
+                   'content-type':'application/json'
+                },
+                
+                credentials:'include',
+                body:JSON.stringify(data)
+            })
+            const result = await res.json()
+            
+            if(!res.ok) alert(result.message)
+        } catch(err) {
+            console.log(err.message)
+         }
+         window.location.reload()
+    }
+  return (
+    <div className='container'>
+    <table class="table">
+    <thead>
+        <tr>
+        <th scope="col">ID</th>
+        <th scope="col">User Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Type</th>
+        </tr>
+    </thead>
+    {users.map(function(data) {
+        return (
+            <tbody>
+              <tr>
+              {/* <th onClick={navstotour}>{data.tourName}</th> */}
+                <td>{data._id}</td>
+                <td>{data.username}</td>
+                <td>{data.email}</td>
+                <td>{data.role}</td>
+                {data.role === 'user' ? <td><Button className='secondary' onClick={() => {makeAdmin(data)}}>Make Admin</Button></td> : <></>} 
+              </tr>
+            </tbody>
+        )
+    })}
+    </table>
+    {/* :<div>Loading....</div> */}
+</div>
+  )
+}
+
+export default AllUser
