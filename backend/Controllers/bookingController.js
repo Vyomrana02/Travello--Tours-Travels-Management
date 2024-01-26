@@ -6,7 +6,7 @@ import Razorpay from 'razorpay'
 // create new booking
 export const createBooking = async(req,res) => {
    const newBooking = new Booking(req.body)
-
+   console.log(newBooking)
    try {
    //    let testAccount = await nodemailer.createTestAccount();
    //    const transporter = nodemailer.createTransport({

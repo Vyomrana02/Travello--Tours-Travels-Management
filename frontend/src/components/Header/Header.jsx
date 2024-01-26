@@ -32,6 +32,11 @@ const nav__linksadimin = [
       path: '/bookings',
       display: 'Bookings'
    },
+   {
+      path: '/AllUser',
+      display: 'Users'
+   },
+   
 ]
 
 const Header = () => {

@@ -46,8 +46,7 @@ const TourCard = ({ tour }) => {
                         <button className=' booking__btn'>Book Now</button>
                      </Link>
                      :
-                     <></>
-                     
+                     <></>                  
        
                      :
                      <></>

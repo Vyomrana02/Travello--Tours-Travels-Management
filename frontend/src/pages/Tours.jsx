@@ -37,7 +37,7 @@ const Tours = () => {
             <Col>
                <Row>
                   <SearchBar />
-         {user.roles === 'admin' ?
+         {user && user.roles === 'admin' ?
                   <Button onClick={AddTour}>Add Tour</Button>
                   : 
                   <></>}

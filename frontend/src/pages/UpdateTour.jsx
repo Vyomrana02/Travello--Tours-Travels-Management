@@ -17,7 +17,7 @@ const UpdateTour = () => {
   //   photo: '',
   //   featured: false
   // })
-  const changephoto = false;
+  const [photos,changephotos] = useState(false);
   const location = useLocation();
   const [tour, setTour] = useState({
     title: location.state.title,
@@ -49,7 +49,8 @@ const UpdateTour = () => {
     formData.append("price", tour.price)
     formData.append("maxGroupSize", tour.maxGroupSize)
     formData.append("desc", tour.desc)
-    if(changephoto === true){
+    if(photos){
+      console.log("my")
       formData.append("photo", tour.photo)
     }
     formData.append("featured",featured)
@@ -84,8 +85,9 @@ const UpdateTour = () => {
       })
   }
   const handlePhoto = e => {
-    changephoto = true;
+    changephotos(true);
     setTour(prev => ({ ...prev, [e.target.id]: e.target.files[0] }))
+    console.log(tour)
   }
   useEffect(() => {
     console.log(location.state)
@@ -166,7 +168,7 @@ const UpdateTour = () => {
       </div>
       <div class="mb-3">
         {/* <img src={tour.photo} alt="" style={{ height: "100px", width: "100px", marginBottom: "20px" }} /> */}
-        {/* <label for="exampleFormControlTextarea1" class="form-label"></label> */}
+        <label for="exampleFormControlTextarea1" class="form-label"></label>
 
         <input type="file" name='file' class="form-control" id="photo" onChange={handlePhoto} />
       </div>

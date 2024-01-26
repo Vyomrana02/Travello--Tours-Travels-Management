@@ -21,7 +21,7 @@ const Booking = ({ tour, avgRating }) => {
       userEmail: user && user.email,
       tourName: title,
       fullName: '',
-      phone: '',
+      phone: 8490066177,
       guestSize: 1,
       bookAt: '',
       totals:0
@@ -60,8 +60,12 @@ const Booking = ({ tour, avgRating }) => {
    }
    const serviceFee = 10
    const totalAmount = Number(price) * Number(booking.guestSize) + Number(serviceFee)
-
-   const [phones,setPhone] = useState("");
+   
+   // const setPhone = (phone) => {
+   //    console.log(phone)
+   //    phones = phone;
+   // }
+   const [phones,setPhones] = useState(0);
    const handleClick = async e => {
       e.preventDefault()
       console.log(booking)
@@ -91,8 +95,8 @@ const Booking = ({ tour, avgRating }) => {
          //       })
          //    })
          // // }
-
-         setBooking(prev => ({ ...prev, phone: phones }))
+         console.log(parseInt(phones))
+         // setBooking(prev => setBooking({ ...prev, phone: phones }))
 
          let response = await fetch(`${BASE_URL}/booking/payment`,{
             method:"POST",
@@ -131,9 +135,9 @@ const Booking = ({ tour, avgRating }) => {
 
          const result = await res.json()
 
-         // if(!res.ok) {
-         //    return alert(result.message)
-         // }
+         if(!res.ok) {
+            return alert(result.message)
+         }
          
          navigate('/thank-you')
       } catch (error) {
@@ -172,7 +176,7 @@ const Booking = ({ tour, avgRating }) => {
                     value={phones}
                     id='phone'
                     onChange={(phone) =>
-                     setPhone(phone)}
+                     setPhones(phone)}
                     />
                <FormGroup className='d-flex align-items-center gap-3'>
                   <input type="date" placeholder='' id='bookAt' required
