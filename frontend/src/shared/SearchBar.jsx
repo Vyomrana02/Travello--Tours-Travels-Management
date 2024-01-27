@@ -3,7 +3,6 @@ import './search-bar.css'
 import { Col, Form, FormGroup } from 'reactstrap'
 import { BASE_URL } from '../utils/config'
 import { useNavigate } from 'react-router-dom'
-import {Button} from 'reactstrap'
 const SearchBar = () => {
    const locationRef = useRef('')
    const distanceRef = useRef(0)

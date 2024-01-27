@@ -3,7 +3,7 @@ import { Button } from 'reactstrap'
 import { BASE_URL } from '../utils/config'
 import axios from 'axios'
 import { useNavigate, useLocation } from 'react-router-dom'
-const UpdateTour = () => {
+const UpdateTour = (tours) => {
   const navigate = useNavigate();
   // const [tour, setTour] = useState({
   //   title: '',
@@ -28,7 +28,7 @@ const UpdateTour = () => {
     maxGroupSize: location.state.maxGroupSize,
     desc: location.state.desc,
     reviews: [],
-    photo: '',
+    photo: location.state.photo,
   })
   const [featured, setfeatured] = React.useState(location.state.featured);
   const handleCheckBox = (event) => {
@@ -89,88 +89,89 @@ const UpdateTour = () => {
     setTour(prev => ({ ...prev, [e.target.id]: e.target.files[0] }))
     console.log(tour)
   }
-  useEffect(() => {
-    console.log(location.state)
-    // async function myfunction(){
-    //     var mytourid = localStorage.getItem('UpdatingTour')
-    //     try {
-    //      const res = await fetch(`${BASE_URL}/tours/${mytourid}`, {
-    //         method:'get',
-    //         headers: {
-    //             'content-type': 'application/json'
-    //          },
-    //      })
 
-    //      const result = await res.json()
-    //      console.log(result.data)
-    //      if(!res.ok) alert(result.message)
+  // useEffect(() => {
+  //   console.log(location.state)
+  //   // async function myfunction(){
+  //   //     var mytourid = localStorage.getItem('UpdatingTour')
+  //   //     try {
+  //   //      const res = await fetch(`${BASE_URL}/tours/${mytourid}`, {
+  //   //         method:'get',
+  //   //         headers: {
+  //   //             'content-type': 'application/json'
+  //   //          },
+  //   //      })
 
-    //     // setTour(result.data)
-    //     const updatedValue = {"title":"juice"};
-    //     // setTour(prev => ({...prev,...updatedValue}));
-    //     setTour(result.data)
-    //     console.log(tour)
-    //     //  navigate('/login')
-    //   } catch(err) {
-    //     console.log(err.message)
-    //      alert(err.message)
-    //   }
-    // }
-    // myfunction();
-    // console.log(tour)
-    console.log(featured)
-  }, [])
+  //   //      const result = await res.json()
+  //   //      console.log(result.data)
+  //   //      if(!res.ok) alert(result.message)
+  
+  //   //     // setTour(result.data)
+  //   //     const updatedValue = {"title":"juice"};
+  //   //     // setTour(prev => ({...prev,...updatedValue}));
+  //   //     setTour(result.data)
+  //   //     console.log(tour)
+  //   //     //  navigate('/login')
+  //   //   } catch(err) {
+  //   //     console.log(err.message)
+  //   //      alert(err.message)
+  //   //   }
+  //   // }
+  //   // myfunction();
+  //   // console.log(tour)
+  //   console.log(featured)
+  // }, [])
 
 
   return (
 
     <div className='container'>
-      <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Title</label>
-        <input type="text" class="form-control" placeholder={location.state.title} id="title" onChange={handleChange} />
+      <div className="mb-3">
+        <label for="exampleFormControlInput1" className="form-label">Title</label>
+        <input type="text" className="form-control" placeholder={location.state.title} id="title" onChange={handleChange} />
       </div>
-      <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">City</label>
-        <input type="text" class="form-control" placeholder={location.state.city} id="city" onChange={handleChange} />
-      </div>
-      <div className='row'>
-        <div class="mb-3 col-6">
-          <label for="exampleFormControlInput1" class="form-label">Duration</label>
-          <input type="text" class="form-control" placeholder={location.state.address} id="address" onChange={handleChange} />
-        </div>
-        <div class="mb-3 col-6">
-          <label for="exampleFormControlInput1" class="form-label">Distance</label>
-          <input type="number" class="form-control" placeholder={location.state.distance} id="distance" onChange={handleChange} />
-        </div>
+      <div className="mb-3">
+        <label for="exampleFormControlInput1" className="form-label">City</label>
+        <input type="text" className="form-control" placeholder={location.state.city} id="city" onChange={handleChange} />
       </div>
       <div className='row'>
-        <div class="mb-3 col-6">
-          <label for="exampleFormControlInput1" class="form-label">Price</label>
-          <input type="number" class="form-control" id="price" placeholder={location.state.price} onChange={handleChange} />
+        <div className="mb-3 col-6">
+          <label for="exampleFormControlInput1" className="form-label">Duration</label>
+          <input type="text" className="form-control" placeholder={location.state.address} id="address" onChange={handleChange} />
         </div>
-        <div class="mb-3 col-6">
-          <label for="exampleFormControlInput1" class="form-label">Max Group Size</label>
-          <input type="number" class="form-control" id="maxGroupSize" placeholder={location.state.maxGroupSize} onChange={handleChange} />
+        <div className="mb-3 col-6">
+          <label for="exampleFormControlInput1" className="form-label">Distance</label>
+          <input type="number" className="form-control" placeholder={location.state.distance} id="distance" onChange={handleChange} />
         </div>
       </div>
-      <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-        <textarea class="form-control" id="desc" rows="3" placeholder={location.state.desc} onChange={handleChange}></textarea>
+      <div className='row'>
+        <div className="mb-3 col-6">
+          <label for="exampleFormControlInput1" className="form-label">Price</label>
+          <input type="number" className="form-control" id="price" placeholder={location.state.price} onChange={handleChange} />
+        </div>
+        <div className="mb-3 col-6">
+          <label for="exampleFormControlInput1" className="form-label">Max Group Size</label>
+          <input type="number" className="form-control" id="maxGroupSize" placeholder={location.state.maxGroupSize} onChange={handleChange} />
+        </div>
       </div>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" value={featured} onChange={handleCheckBox}
+      <div className="mb-3">
+        <label for="exampleFormControlTextarea1" className="form-label">Description</label>
+        <textarea className="form-control" id="desc" rows="3" placeholder={location.state.desc} onChange={handleChange}></textarea>
+      </div>
+      <div className="form-check">
+        <input className="form-check-input" type="checkbox" value={featured} onChange={handleCheckBox}
           id="subscribe"
           name="subscribe" 
           defaultChecked={featured}/>
-        <label class="form-check-label" for="flexCheckDefault">
+        <label className="form-check-label" for="flexCheckDefault">
           Featured
         </label>
       </div>
-      <div class="mb-3">
-        {/* <img src={tour.photo} alt="" style={{ height: "100px", width: "100px", marginBottom: "20px" }} /> */}
-        <label for="exampleFormControlTextarea1" class="form-label"></label>
+      <div className="mb-3">
+        <img src={tour.photo} alt="" style={{ height: "100px", width: "100px", marginBottom: "20px" }} />
+        <label for="exampleFormControlTextarea1" className="form-label"></label>
 
-        <input type="file" name='file' class="form-control" id="photo" onChange={handlePhoto} />
+        <input type="file" name='file' className="form-control" id="photo" onChange={handlePhoto} />
       </div>
       <Button onClick={handleSubmit}>Update Tour</Button>
     </div>

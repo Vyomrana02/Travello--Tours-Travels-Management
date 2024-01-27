@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import { useMemo } from 'react';
 import { BASE_URL } from '../utils/config';
 import { useNavigate } from 'react-router-dom'
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext'
-import { Link } from 'react-router-dom'
-
 import dateFormat from 'dateformat';
 const MyBookings = () => {
-    const { user, dispatch } = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
     // useEffect(async (e)=>{
     //     // e.preventDefault()
 
@@ -103,16 +102,19 @@ const MyBookings = () => {
             alert(err.message)
         }
     }
+
+
+    
     return (
         <div className='container'>
-            <table class="table">
+            <table className="table">
             <thead>
                 <tr>
                 <th scope="col">TourName</th>
                 <th scope="col">Registered Name</th>
                 <th scope="col">Guest Size</th>
                 <th scope="col">Phone No.</th>
-                <th scope="col">Total Amount`</th>
+                <th scope="col">Total Amount</th>
                 <th scope="col">Booked At</th>
                 <th scope="col">Booking At</th>
                 </tr>
@@ -133,6 +135,7 @@ const MyBookings = () => {
                 )
             })}
             </table>
+            {/* <MaterialReactTable table={table} /> */}
             {/* :<div>Loading....</div> */}
         </div>
         

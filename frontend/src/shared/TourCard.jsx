@@ -11,13 +11,13 @@ const TourCard = ({ tour }) => {
    const { _id, title, city, photo, price, featured, reviews } = tour
 
    const { totalRating, avgRating } = calculateAvgRating(reviews)
-   var sphoto = "/static/media/1704347532714_WORKS.d42839cf.png"
+   // var sphoto = "/static/media/1704347532714_WORKS.d42839cf.png"
    // console.log(imgs)
    return (
       <div className='tour__card'>
          <Card>
             <div className="tour__img">
-               <img src={photo} alt="tour-img" />
+               <img src={photo} width="300" height="200" alt="tour-img" />
                {/* <img src="/uploads/1704347532714_WORKS.png" alt="tour-img" /> */}
                {featured && <span>Featured</span>}
             </div>

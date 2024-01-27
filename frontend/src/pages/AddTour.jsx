@@ -76,41 +76,41 @@ const AddTour = () => {
   return (
     
     <div className='container'>
-      <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Title</label>
-        <input type="text" class="form-control" id="title" onChange={handleChange} />
+      <div className="mb-3">
+        <label for="exampleFormControlInput1" className="form-label">Title</label>
+        <input type="text" className="form-control" id="title" onChange={handleChange} />
       </div>
-      <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">City</label>
-        <input type="text" class="form-control" id="city" onChange={handleChange} />
-      </div>
-      <div className='row'>
-        <div class="mb-3 col-6">
-          <label for="exampleFormControlInput1" class="form-label">Duration</label>
-          <input type="text" class="form-control" id="address" onChange={handleChange} />
-        </div>
-        <div class="mb-3 col-6">
-          <label for="exampleFormControlInput1" class="form-label">Distance</label>
-          <input type="number" class="form-control" id="distance" onChange={handleChange} />
-        </div>
+      <div className="mb-3">
+        <label for="exampleFormControlInput1" className="form-label">City</label>
+        <input type="text" className="form-control" id="city" onChange={handleChange} />
       </div>
       <div className='row'>
-        <div class="mb-3 col-6">
-          <label for="exampleFormControlInput1" class="form-label">Price</label>
-          <input type="number" class="form-control" id="price" onChange={handleChange} />
+        <div className="mb-3 col-6">
+          <label for="exampleFormControlInput1" className="form-label">Duration</label>
+          <input type="text" className="form-control" id="address" onChange={handleChange} />
         </div>
-        <div class="mb-3 col-6">
-          <label for="exampleFormControlInput1" class="form-label">Max Group Size</label>
-          <input type="number" class="form-control" id="maxGroupSize" onChange={handleChange} />
+        <div className="mb-3 col-6">
+          <label for="exampleFormControlInput1" className="form-label">Distance</label>
+          <input type="number" className="form-control" id="distance" onChange={handleChange} />
         </div>
       </div>
-      <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-        <textarea class="form-control" id="desc" rows="3" onChange={handleChange}></textarea>
+      <div className='row'>
+        <div className="mb-3 col-6">
+          <label for="exampleFormControlInput1" className="form-label">Price</label>
+          <input type="number" className="form-control" id="price" onChange={handleChange} />
+        </div>
+        <div className="mb-3 col-6">
+          <label for="exampleFormControlInput1" className="form-label">Max Group Size</label>
+          <input type="number" className="form-control" id="maxGroupSize" onChange={handleChange} />
+        </div>
       </div>
-      <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">Photo</label>
-        <input type="file" name='file' class="form-control" id="photo" onChange={handlePhoto} />
+      <div className="mb-3">
+        <label for="exampleFormControlTextarea1" className="form-label">Description</label>
+        <textarea className="form-control" id="desc" rows="3" onChange={handleChange}></textarea>
+      </div>
+      <div className="mb-3">
+        <label for="exampleFormControlTextarea1" className="form-label">Photo</label>
+        <input type="file" name='file' className="form-control" id="photo" onChange={handlePhoto} />
       </div>
       <Button onClick={handleSubmit}>Add Tour</Button>
     </div>

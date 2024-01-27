@@ -10,11 +10,11 @@ import useFetch from '../hooks/useFetch'
 import { BASE_URL } from '../utils/config'
 import { AuthContext } from '../context/AuthContext'
 import {Button} from 'reactstrap'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 const Tours = () => {
    const [pageCount, setPageCount] = useState(0)
    const [page, setPage] = useState(0)
-   const { user, dispatch } = useContext(AuthContext)
+   const { user } = useContext(AuthContext)
    const { data: tours, loading, error } = useFetch(`${BASE_URL}/tours?page=${page}`)
    const { data: tourCount } = useFetch(`${BASE_URL}/tours/search/getTourCount`)
 
@@ -54,7 +54,7 @@ const Tours = () => {
                   !loading && !error &&
                   <Row>
                      {
-                        tours?.map(tour => (<Col lg='3' md='6' sm='6' className='mb-4' key={tour._id}> <TourCard tour={tour} /> </Col>))
+                        tours?.map(tour => (<Col lg='3' md='6' sm='6'  className='mb-4' key={tour._id}> <TourCard tour={tour} /> </Col>))
                      }
 
                      <Col lg='12'>

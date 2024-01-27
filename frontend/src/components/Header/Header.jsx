@@ -86,7 +86,7 @@ const Header = () => {
       script.crossOrigin = "anonymous"
 
       document.body.appendChild(script)
-      console.log(user)
+      // console.log(user)
       return () => {
          // clean up the script when the component in unmounted
          document.body.removeChild(script)
@@ -141,7 +141,7 @@ const Header = () => {
                            </div>
 
                            <span className="mobile__menu" onClick={toggleMenu}>
-                              <i class="ri-menu-line"></i>
+                              <i className="ri-menu-line"></i>
                            </span>
                         </div>
                      </>
@@ -182,7 +182,7 @@ const Header = () => {
                            </div>
 
                            <span className="mobile__menu" onClick={toggleMenu}>
-                              <i class="ri-menu-line"></i>
+                              <i className="ri-menu-line"></i>
                            </span>
                         </div>
                      </>
@@ -225,7 +225,7 @@ const Header = () => {
                            </div>
 
                            <span className="mobile__menu" onClick={toggleMenu}>
-                              <i class="ri-menu-line"></i>
+                              <i className="ri-menu-line"></i>
                            </span>
                         </div> 
                      </>
