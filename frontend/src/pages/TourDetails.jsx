@@ -304,23 +304,30 @@ const TourDetails = () => {
    };
 
    const DeleteTour = async () => {
-      try {
-         console.log(tour);
-         const res = await fetch(`${BASE_URL}/tours/${tour._id}`, {
-            method: 'delete',
-            credentials: 'include'
-         })
+      var answer = window.confirm("Are you sure you want to Delete Tour?");
+      if (answer) {
+         try {
+            console.log(tour);
+            const res = await fetch(`${BASE_URL}/tours/${tour._id}`, {
+               method: 'delete',
+               credentials: 'include'
+            })
 
-         const result = res.json()
-         console.log(result)
-         //  if(!res.ok) alert(result.message)
+            const result = res.json()
+            console.log(result)
+            //  if(!res.ok) alert(result.message)
 
-         //   setTour(result)
-         navigate('/tours')
-      } catch (err) {
-         console.log(err.message)
-         alert(err.message)
+            //   setTour(result)
+            navigate('/tours')
+         } catch (err) {
+            console.log(err.message)
+            alert(err.message)
+         }
       }
+      else {
+         
+      }
+
    }
    return (
       <section>
@@ -330,30 +337,30 @@ const TourDetails = () => {
             {
                !loading && !error &&
                <Row>
-                  <Col lg={user ? ((user.roles==='user')? 8 : 12 ): 12}>
+                  <Col lg={user ? ((user.roles === 'user') ? 8 : 12) : 12}>
                      <div className="tour__content">
                         <img src={photo} alt="" />
                         {/* {user.roles === 'admin' ?
                   <Button onClick={AddTour}>Add Tour</Button>
                   : 
                   <></>} */}
-                  {/* {(user && user.roles === 'admin' ?  <Button onClick={AddTour}>Add Tour</Button> : <></>)} */}
-                  {(user ? 
-                                    (user.roles==='admin'?
-                                       // <div className="review__input">
-                                       //    <input type="text" ref={reviewMsgRef} placeholder='share your thoughts' required />
-                                       //    <button className='btn primary__btn text-white' type='submit'>
-                                       //       Submit
-                                       //    </button>
-                                       // </div>
-                                       <>
-                                       <Container>
-                                       <p><Button onClick={UpdateTour}>Update Tour</Button>       <Button onClick={DeleteTour}>Delete Tour</Button>  
-                                       </p>
-                                       </Container></>:
-                                        <></>):
-                                       <></>)
-                                 }
+                        {/* {(user && user.roles === 'admin' ?  <Button onClick={AddTour}>Add Tour</Button> : <></>)} */}
+                        {(user ?
+                           (user.roles === 'admin' ?
+                              // <div className="review__input">
+                              //    <input type="text" ref={reviewMsgRef} placeholder='share your thoughts' required />
+                              //    <button className='btn primary__btn text-white' type='submit'>
+                              //       Submit
+                              //    </button>
+                              // </div>
+                              <>
+                                 <Container>
+                                    <p><Button onClick={UpdateTour}>Update Tour</Button>       <Button onClick={DeleteTour}>Delete Tour</Button>
+                                    </p>
+                                 </Container></> :
+                              <></>) :
+                           <></>)
+                        }
                         <div className="tour__info">
                            <h2>{title}</h2>
                            <div className="d-flex align-items-center gap-5">
@@ -380,32 +387,32 @@ const TourDetails = () => {
                         <div className="tour__reviews mt-4">
                            <h4>Reviews ({reviews?.length} reviews)</h4>
 
-   <Form onSubmit={submitHandler}>
-      <div className="d-flex align-items-center gap-3 mb-4 rating__group">
-         {/* <span onClick={() => setTourRating(1)}>1 <i class='ri-star-s-fill'></i></span>
+                           <Form onSubmit={submitHandler}>
+                              <div className="d-flex align-items-center gap-3 mb-4 rating__group">
+                                 {/* <span onClick={() => setTourRating(1)}>1 <i class='ri-star-s-fill'></i></span>
          <span onClick={() => setTourRating(2)}>2 <i class='ri-star-s-fill'></i></span>
          <span onClick={() => setTourRating(3)}>3 <i class='ri-star-s-fill'></i></span>
          <span onClick={() => setTourRating(4)}>4 <i class='ri-star-s-fill'></i></span>
          <span onClick={() => setTourRating(5)}>5 <i class='ri-star-s-fill'></i></span> */}
-         <ReactStars
-            count={5}
-            onChange={ratingChanged}
-            size={24}
-            activeColor="#ffd700"
-         />
-      </div>
-         {(user ? 
-            (user.roles==='user'?
-               <div className="review__input">
-                  <input type="text" ref={reviewMsgRef} placeholder='share your thoughts' required />
-                  <button className='btn primary__btn text-white' type='submit'>
-                     Submit
-                  </button>
-               </div> :
-                <></>):
-               <></>)
-         }
-   </Form>
+                                 <ReactStars
+                                    count={5}
+                                    onChange={ratingChanged}
+                                    size={24}
+                                    activeColor="#ffd700"
+                                 />
+                              </div>
+                              {(user ?
+                                 (user.roles === 'user' ?
+                                    <div className="review__input">
+                                       <input type="text" ref={reviewMsgRef} placeholder='share your thoughts' required />
+                                       <button className='btn primary__btn text-white' type='submit'>
+                                          Submit
+                                       </button>
+                                    </div> :
+                                    <></>) :
+                                 <></>)
+                              }
+                           </Form>
 
                            <ListGroup className='user__reviews'>
                               {
@@ -436,14 +443,14 @@ const TourDetails = () => {
                      </div>
                   </Col>
 
-                  {(user ? ((user.roles ==='user')?
+                  {(user ? ((user.roles === 'user') ?
                      <Col lg='4'>
                         <Booking tour={tour} avgRating={avgRating} />
                      </Col>
-                  :
-                  <></>)                 
-                  :
-                  <></>)}
+                     :
+                     <></>)
+                     :
+                     <></>)}
                </Row>
             }
          </Container>
@@ -523,7 +530,7 @@ const TourDetails = () => {
    //                         }
    //                      </Form>
 
-                        
+
    //                      <ListGroup className='user__reviews'>
    //                            {
    //                               reviews?.map(review => (
@@ -558,7 +565,7 @@ const TourDetails = () => {
    //                 <></>)                 
    //                 :
    //                 <></>)}
-   
+
    //             </Row>
    //          }
    //       </Container>

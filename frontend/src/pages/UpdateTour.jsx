@@ -83,6 +83,7 @@ const UpdateTour = (tours) => {
       }).catch(err => {
         console.log(err, "err");
       })
+      
   }
   const handlePhoto = e => {
     changephotos(true);

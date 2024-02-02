@@ -18,7 +18,7 @@ export const createBooking = async(req,res) => {
    //           pass: '67P3yazqhGZax6WY3X'
    //       }
    //   });
-     var tempp = "<h2>Thank You for booking ....</h2><br>Details<br>"+"TourName:- " + newBooking.tourName + "<br>Booking Date:- "+ newBooking.bookAt + "<br> FullName:- " + newBooking.fullName +"<br>GuestSize:-"+newBooking.guestSize + "<br>Phone No.:- " +newBooking.phone;
+     var tempp = "<h2>Thank You for booking ....</h2><br>Details<br>"+"TourName:- " + newBooking.tourName + "<br>Booking Date:- "+ newBooking.bookAt + "<br> FullName:- " + newBooking.fullName +"<br>GuestSize:-"+newBooking.guestSize + "<br>Phone No.:- " +newBooking.phone + "<br><br>Our Coordinator will soon reach to you, For further details...";
    //   const info = await transporter.sendMail({
    //    from: '"Fred Foo 👻" <antwon41@ethereal.email>', // sender address
    //    to: newBooking.userEmail, // list of receivers
