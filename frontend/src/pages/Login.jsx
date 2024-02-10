@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Container, Row, Col, Form, FormGroup, Button } from 'reactstrap'
 import '../styles/login.css'
 import { Link, useNavigate } from 'react-router-dom'
@@ -15,6 +15,13 @@ const Login = () => {
 
    const {dispatch} = useContext(AuthContext)
    const navigate = useNavigate()
+
+   const { user } = useContext(AuthContext)
+
+   useEffect(()=>{
+      if(user)
+         navigate('/')
+   },[])
 
    const handleChange = e => {
       setCredentials(prev => ({ ...prev, [e.target.id]: e.target.value }))

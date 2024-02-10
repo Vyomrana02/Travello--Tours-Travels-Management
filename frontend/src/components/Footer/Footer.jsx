@@ -21,10 +21,6 @@ const quick__links = [
 
 const quick__links2 = [
    {
-      path: '/gallery',
-      display: 'Gallery'
-   },
-   {
       path: '/login',
       display: 'Login'
    },
@@ -105,7 +101,7 @@ const Footer = () => {
                            <span><i className='ri-map-pin-line'></i></span>
                            Address:
                         </h6>
-                        <p className='mb-0'>Lorem</p>
+                        <p className='mb-0'>21, 22, National Chambers, Ashram Road ,Ahmedabad</p>
                      </ListGroupItem>
 
                      <ListGroupItem className='ps-0 border-0 d-flex align-items-center gap-3'>
@@ -114,13 +110,13 @@ const Footer = () => {
                            Email:
                         </h6>
 
-                        <p className='mb-0'>Lorem</p>
+                        <p className='mb-0'>vyom.rana02@gmail.com</p>
                      </ListGroupItem>
 
                      <ListGroupItem className='ps-0 border-0 d-flex align-items-center gap-3'>
                         <h6 className='mb-0 d-flex align-items-center gap-2'>
                            <span><i className='ri-phone-fill'></i></span>
-                           Phone:
+                           Phone:+91-8490066177
                         </h6>
 
                         <p className='mb-0'>Lorem</p>
