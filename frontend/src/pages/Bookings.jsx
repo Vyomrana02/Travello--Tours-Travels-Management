@@ -126,7 +126,7 @@ const MyBookings = () => {
                       <th onClick={navstotour}>{data.tourName}</th>
                         <td>{data.fullName}</td>
                         <td>{data.guestSize}</td>
-                        <td>+{data.phone}</td>
+                        <td>+{data.phone.toString().slice(0, 2)} { data.phone.toString().slice(2)}</td>
                         <td>{data.totals}</td>
                         <td>{dateFormat(data.createdAt, "mmmm dS, yyyy")}</td>
                         <td>{dateFormat(data.bookAt, "mmmm dS, yyyy")}</td>

@@ -13,6 +13,8 @@ import Bookings from '../pages/Bookings'
 import AddTour from '../pages/AddTour'
 import UpdateTour from '../pages/UpdateTour'
 import AllUser from '../pages/AllUser'
+import ResetPassword from '../pages/ResetPassword'
+import ForgotPassword from '../pages/ForgotPasswords'
 const Routers = () => {
    return (
       <Routes>
@@ -30,6 +32,8 @@ const Routers = () => {
          <Route path='/AddTour' element={<AddTour/>} />
          <Route path='/UpdateTour' element={<UpdateTour/>} />
          <Route path='/AllUser' element={<AllUser/>} />
+         <Route path='/forgot-password' element={<ForgotPassword/>} />
+         <Route path='/reset-password/:id/:token' element={<ResetPassword/>} />
       </Routes>
    )
 }

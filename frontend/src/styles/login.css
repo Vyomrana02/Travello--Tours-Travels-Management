@@ -3,6 +3,10 @@
    text-align: center;
 }
 
+.toast-message{
+   background: "orange";
+}
+
 .login__img img {
    width     : 70%;
    object-fit: contain;

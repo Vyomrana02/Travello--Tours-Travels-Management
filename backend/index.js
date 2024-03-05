@@ -38,6 +38,7 @@ const connect = async() => {
 
 app.use(express.json())
 app.use(cors(corsOptions))
+app.set("view engine","ejs");
 app.use(cookieParser())
 // app.use(multer({dest:'./uploads/'}).single('uploads'));
 app.use("/api/v1/auth", authRoute)

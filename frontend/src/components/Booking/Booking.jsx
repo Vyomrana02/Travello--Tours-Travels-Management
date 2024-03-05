@@ -278,9 +278,10 @@ const Booking = ({ tour, avgRating }) => {
                   <input type="text" placeholder='Full Name' id='fullName' required
                      onChange={handleChange} />
                </FormGroup>
-               <FormGroup>
+               <FormGroup className='d-flex align-items-center gap-3' >
                   <PhoneInput
                      className="number"
+                     inputStyle={{width: '100%'}}
                      country={"in"}
                      id='phone'
                      onChange={(phones) => {

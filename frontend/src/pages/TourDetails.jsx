@@ -241,6 +241,7 @@ import { AuthContext } from '../context/AuthContext'
 // import { Rating } from '@mui/material';
 import ReactStars from 'react-rating-stars-component'
 import { Button } from 'reactstrap'
+import { ToastContainer, toast } from 'react-toastify';
 const TourDetails = () => {
    const { id } = useParams()
    const reviewMsgRef = useRef('')
@@ -284,7 +285,27 @@ const TourDetails = () => {
          if (!res.ok) {
             return alert(result.message)
          }
-         window.location.reload();
+         window.scroll({
+            top: 0, 
+            left: 0, 
+            behavior: 'smooth' 
+           });
+         
+         toast('🙏🏼 We appreciate your review! 😊', {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+         });
+         
+         const refresing = ()  => {
+            window.location.reload();
+         }
+         setTimeout(refresing, 3000);
       } catch (error) {
          alert(error.message)
       }
@@ -331,6 +352,18 @@ const TourDetails = () => {
    }
    return (
       <section>
+          <ToastContainer
+               position="top-center"
+               autoClose={5000}
+               hideProgressBar={false}
+               newestOnTop
+               closeOnClick
+               rtl={false}
+               pauseOnFocusLoss
+               draggable
+               pauseOnHover={false}
+               theme="colored"
+            />
          <Container>
             {loading && <h4 className='text-center pt-5'>LOADING.........</h4>}
             {error && <h4 className='text-center pt-5'>{error}</h4>}

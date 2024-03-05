@@ -6,6 +6,8 @@ import registerImg from '../assets/images/login.png'
 import userIcon from '../assets/images/user.png'
 import { AuthContext } from '../context/AuthContext'
 import { BASE_URL } from '../utils/config'
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const Register = () => {
    const [credentials, setCredentials] = useState({
@@ -41,7 +43,20 @@ const Register = () => {
          })
          const result = await res.json()
 
-         if(!res.ok) alert(result.message)
+         if(!res.ok){
+            toast.warning("Oops! 🙈 Looks like we already have a user with this email. 😅", {
+            // toast.warning(res.message, {
+               position: "top-center",
+               autoClose: 3000,
+               hideProgressBar: false,
+               closeOnClick: true,
+               pauseOnHover: false,
+               draggable: true,
+               progress: undefined,
+               className: "toast-message"
+            }); 
+            return;
+         } 
 
          dispatch({type:'REGISTER_SUCCESS'})
          navigate('/login')
@@ -52,6 +67,19 @@ const Register = () => {
 
    return (
       <section>
+          <ToastContainer
+               position="top-center"
+               autoClose={5000}
+               hideProgressBar={false}
+               newestOnTop
+               closeOnClick
+               rtl={false}
+               pauseOnFocusLoss
+               draggable
+               pauseOnHover={false}
+               theme="colored"
+               toastStyle={{ backgroundColor: "#faa935" }}
+            />
          <Container>
             <Row>
                <Col lg='8' className='m-auto'>

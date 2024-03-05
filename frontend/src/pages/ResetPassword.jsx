@@ -6,46 +6,32 @@ import loginImg from '../assets/images/login.png'
 import userIcon from '../assets/images/user.png'
 import { AuthContext } from '../context/AuthContext'
 import { BASE_URL } from '../utils/config'
+import { useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
-const Login = () => {
-   const [credentials, setCredentials] = useState({
-      email: undefined,
-      password: undefined
-   })
+const ResetPassword = () => {
+   const variable = useLocation()
 
-   const {dispatch} = useContext(AuthContext)
+   const [pass, setpass] = useState("")
+   const [cpass, csetpass] = useState("")
+
    const navigate = useNavigate()
 
-   const { user } = useContext(AuthContext)
-
-   useEffect(()=>{
-      if(user)
-         navigate('/')
-   },[])
-
-   const handleChange = e => {
-      setCredentials(prev => ({ ...prev, [e.target.id]: e.target.value }))
+   const handleChangepass = async e => {
+      setpass(e.target.value);
    }
-   
+   const handleChangecpass = async e => {
+      csetpass(e.target.value);
+   }
    const handleClick = async e => {
       e.preventDefault()
 
-      dispatch({type:'LOGIN_START'})
-
       try {
-         const res = await fetch(`${BASE_URL}/auth/login`, {
-            method:'post',
-            headers: {
-               'content-type':'application/json'
-            },
-            credentials:'include',
-            body: JSON.stringify(credentials)
-         })
-
-         const result = await res.json()
-         if(!res.ok){
-            toast.info("🚫  Oops! " + result.message + "❌", {
+         //  console.log(window.location.href)
+         if (cpass != pass) {
+            console.log(cpass);
+            console.log(pass);
+            toast.error('🔒 Both Passwords should match 🔤🔁🔤.', {
                position: "top-center",
                autoClose: 3000,
                hideProgressBar: false,
@@ -54,22 +40,41 @@ const Login = () => {
                draggable: true,
                progress: undefined,
                theme: "colored",
-            }); 
-            // alert(result.message)
-           return;
+            });
+            return;
          }
-         console.log(result.data)
+         var input = window.location.href;
 
-         dispatch({type:"LOGIN_SUCCESS", payload:result.data})
-         navigate('/')
-      } catch(err) {
-         dispatch({type:"LOGIN_FAILURE", payload:err.message})
+         var fields = input.split('/');
+         var id = fields[4]
+         var token = fields[5]
+         const res = await fetch(`${BASE_URL}/auth/reset-password/${id}/${token}`, {
+            method: 'post',
+            headers: {
+               'content-type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({ pass })
+         })
+
+         const result = await res.json()
+         if (!res.ok) {
+            alert(result.message)
+
+         }
+         // console.log(result.data)
+
+         //  dispatch({type:"LOGIN_SUCCESS", payload:result.data})
+         navigate('/login')
+      } catch (err) {
+         //  dispatch({type:"LOGIN_FAILURE", payload:err.message})
       }
    }
 
    return (
       <section>
-         <ToastContainer
+         <Container>
+            <ToastContainer
                position="top-center"
                autoClose={5000}
                hideProgressBar={false}
@@ -80,9 +85,7 @@ const Login = () => {
                draggable
                pauseOnHover={false}
                theme="colored"
-               toastStyle={{ backgroundColor: "#faa935" }}
             />
-         <Container>
             <Row>
                <Col lg='8' className='m-auto'>
                   <div className="login__container d-flex justify-content-between">
@@ -94,18 +97,17 @@ const Login = () => {
                         <div className="user">
                            <img src={userIcon} alt="" />
                         </div>
-                        <h2>Login</h2>
-
+                        <h2>Reset Password</h2>
+                        <h2>{console.log(variable.href)}</h2>
                         <Form onSubmit={handleClick}>
                            <FormGroup>
-                              <input type="email" placeholder='Email' id='email' onChange={handleChange} required />
+                              <input type="password" placeholder='Password' id='password' onChange={handleChangepass} required />
                            </FormGroup>
                            <FormGroup>
-                              <input type="password" placeholder='Password' id='password' onChange={handleChange} required />
+                              <input type="password" placeholder='Confirm Password' id='password' onChange={handleChangecpass} required />
                            </FormGroup>
-                           <Button className='btn secondary__btn auth__btn' type='submit'>Login</Button>
+                           <Button className='btn secondary__btn auth__btn' type='submit'>Submit</Button>
                         </Form>
-                        <p>Don't have an account? <Link to='/register'>Create</Link> <span style={{color:"Black", fontSize:"15px", fontWeight:"Bold"}}>OR</span>  Forgot Password for account? <Link to='/forgot-password'>Forgot Password</Link></p>
                      </div>
                   </div>
                </Col>
@@ -115,4 +117,4 @@ const Login = () => {
    )
 }
 
-export default Login
+export default ResetPassword;

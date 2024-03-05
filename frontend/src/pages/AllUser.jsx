@@ -53,6 +53,7 @@ const AllUser = () => {
         <th scope="col">User Name</th>
         <th scope="col">Email</th>
         <th scope="col">Type</th>
+        <th scope="col">Add Admin</th>
         </tr>
     </thead>
     {users.map(function(data) {
@@ -64,7 +65,7 @@ const AllUser = () => {
                 <td>{data.username}</td>
                 <td>{data.email}</td>
                 <td>{data.role}</td>
-                {data.role === 'user' ? <td><Button className='secondary' onClick={() => {makeAdmin(data)}}>Make Admin</Button></td> : <></>} 
+                {data.role === 'user' ? <td><Button className='secondary' onClick={() => {makeAdmin(data)}}>Make Admin</Button></td> : <td></td>} 
               </tr>
             </tbody>
         )
