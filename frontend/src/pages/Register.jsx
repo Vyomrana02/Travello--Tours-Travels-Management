@@ -34,20 +34,13 @@ const Register = () => {
       e.preventDefault()
 
       try {
-         const res = await fetch(`${BASE_URL}/auth/register`, {
-            method:'post',
-            headers: {
-               'content-type':'application/json'
-            },
-            body: JSON.stringify(credentials)
-         })
-         const result = await res.json()
-
-         if(!res.ok){
-            toast.warning("Oops! 🙈 Looks like we already have a user with this email. 😅", {
-            // toast.warning(res.message, {
+         const PASSEWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?]).{8,}$/;
+         const EMAIL_REGEX = /^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$/
+         // console.log(credentials.password)
+         if(!PASSEWORD_REGEX.test(credentials.password)){
+            toast.error(" 💪🔒 Please input a strong password containing at least 8 characters, including uppercase, lowercase, special Symbol. 😅", {
                position: "top-center",
-               autoClose: 3000,
+               autoClose: 5000,
                hideProgressBar: false,
                closeOnClick: true,
                pauseOnHover: false,
@@ -55,11 +48,61 @@ const Register = () => {
                progress: undefined,
                className: "toast-message"
             }); 
-            return;
          } 
+          if(!EMAIL_REGEX.test(credentials.email)) {
+            toast.error("📧 Provide a valid email address adhering to the standard format, including username, @ symbol, and domain. 😅", {
+               position: "top-center",
+               autoClose: 5000,
+               hideProgressBar: false,
+               closeOnClick: true,
+               pauseOnHover: false,
+               draggable: true,
+               progress: undefined,
+               className: "toast-message"
+            }); 
+         } 
+         if(PASSEWORD_REGEX.test(credentials.password) && EMAIL_REGEX.test(credentials.email)){
 
-         dispatch({type:'REGISTER_SUCCESS'})
-         navigate('/login')
+                const res = await fetch(`${BASE_URL}/auth/register`, {
+               method:'post',
+               headers: {
+                  'content-type':'application/json'
+               },
+               body: JSON.stringify(credentials)
+            })
+            const result = await res.json()
+   
+            if(!res.ok){
+               toast.error("Oops! 🙈 Looks like we already have a user with this email. 😅", {
+                  position: "top-center",
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: false,
+                  draggable: true,
+                  progress: undefined,
+                  className: "toast-message"
+               }); 
+               return;
+            } 
+            else {
+               toast.info("Time to verify your email and enjoy seamless login! 😉", {
+                  position: "top-center",
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: false,
+                  draggable: true,
+                  progress: undefined,
+                  className: "toast-message"
+               }); 
+               dispatch({type:'REGISTER_SUCCESS'})
+               setTimeout(()=>{
+                  navigate('/login')
+               },3000)
+            }
+           
+         }
       } catch(err) {
          alert(err.message)
       }
@@ -78,7 +121,7 @@ const Register = () => {
                draggable
                pauseOnHover={false}
                theme="colored"
-               toastStyle={{ backgroundColor: "#faa935" }}
+               // toastStyle={{ backgroundColor: "#faa935" }}
             />
          <Container>
             <Row>
@@ -99,7 +142,7 @@ const Register = () => {
                               <input type="text" placeholder='Username' id='username' onChange={handleChange} required />
                            </FormGroup>
                            <FormGroup>
-                              <input type="email" placeholder='Email' id='email' onChange={handleChange} required />
+                              <input type="test" placeholder='Email' id='email' onChange={handleChange} required />
                            </FormGroup>
                            <FormGroup>
                               <input type="password" placeholder='Password' id='password' onChange={handleChange} required />

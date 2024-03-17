@@ -43,6 +43,7 @@ const Booking = ({ tour, avgRating }) => {
 
       } else {
          // toast("")
+         window.scrollTo(0, 0)
          toast.error('🦄 Booking date is should be greater than the current date.', {
             position: "top-center",
             autoClose: 3000,
@@ -64,6 +65,7 @@ const Booking = ({ tour, avgRating }) => {
          setBooking(prev => ({ ...prev, totals: totalAmount }))
       } else if (e.target.value <= 0) {
          // alert(`Min allowded Group Size is 1`);
+         window.scrollTo(0, 0)
          toast.error('Min allowded Group Size is 1', {
             position: "top-center",
             autoClose: 3000,
@@ -107,7 +109,17 @@ const Booking = ({ tour, avgRating }) => {
 
       try {
          if (!user || user === undefined || user === null) {
-            return alert('Please sign in')
+            toast.error('Please sign in', {
+               position: "top-center",
+               autoClose: 3000,
+               hideProgressBar: false,
+               closeOnClick: true,
+               pauseOnHover: false,
+               draggable: true,
+               progress: undefined,
+               theme: "colored",
+            });
+            return
          }
 
          console.log(booking)
@@ -125,6 +137,37 @@ const Booking = ({ tour, avgRating }) => {
             });
             return
          }
+
+         const checkoverlapp = await fetch(`${BASE_URL}/booking/Check`, {
+            method: 'post',
+            headers: {
+               'content-type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(booking)
+         })
+
+         const result = await checkoverlapp.json()
+
+         if (!checkoverlapp.ok) {
+            window.scroll({
+               top: 0, 
+               left: 0, 
+               behavior: 'smooth' 
+              });
+            toast.error(result.message, {
+               position: "top-center",
+               autoClose: 3000,
+               hideProgressBar: false,
+               closeOnClick: true,
+               pauseOnHover: false,
+               draggable: true,
+               progress: undefined,
+               theme: "colored",
+            });
+            return
+         }
+
          let response = await fetch(`${BASE_URL}/booking/payment`, {
             method: "POST",
             headers: {
@@ -161,15 +204,71 @@ const Booking = ({ tour, avgRating }) => {
                const result = await res.json()
 
                if (!res.ok) {
-                  return alert(result.message)
+                  window.scroll({
+                     top: 0, 
+                     left: 0, 
+                     behavior: 'smooth' 
+                    });
+                  toast.error(result.message, {
+                     position: "top-center",
+                     autoClose: 3000,
+                     hideProgressBar: false,
+                     closeOnClick: true,
+                     pauseOnHover: false,
+                     draggable: true,
+                     progress: undefined,
+                     theme: "colored",
+                  });
+                  return
                }
 
                navigate('/thank-you')
+         
             }
          }
 
          var rzp1 = window.Razorpay(options);
          rzp1.open();
+         
+         // const res = await fetch(`${BASE_URL}/booking`, {
+         //    method: 'post',
+         //    headers: {
+         //       'content-type': 'application/json'
+         //    },
+         //    credentials: 'include',
+         //    body: JSON.stringify(booking)
+         // })
+         // const result = await res.json()
+         // if(!res.ok){
+            // window.scroll({
+            //    top: 0, 
+            //    left: 0, 
+            //    behavior: 'smooth' 
+            //   });
+            // toast.error(result.message, {
+            //    position: "top-center",
+            //    autoClose: 3000,
+            //    hideProgressBar: false,
+            //    closeOnClick: true,
+            //    pauseOnHover: false,
+            //    draggable: true,
+            //    progress: undefined,
+            //    theme: "colored",
+            // });
+            // return
+         // } else {
+         //       toast.error("nicesss", {
+         //          position: "top-center",
+         //          autoClose: 3000,
+         //          hideProgressBar: false,
+         //          closeOnClick: true,
+         //          pauseOnHover: false,
+         //          draggable: true,
+         //          progress: undefined,
+         //          theme: "colored",
+         //       });
+         //       return
+         // }
          // booking.totalAmount = totalAmount;
 
       } catch (error) {

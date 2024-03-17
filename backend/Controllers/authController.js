@@ -110,7 +110,9 @@ export const login = async (req, res) => {
       if (!user) {
          return res.status(404).json({ success: false, message: 'User not found!' })
       }
-
+      if(user.isBan === true){
+         return res.status(401).json({ success: false, message: 'User is Banned.' })
+      }
       // if user is exist then check the passord or compare the password
       const checkCorrectPassword = await bcrypt.compare(req.body.password, user.password)
 
@@ -137,10 +139,13 @@ export const login = async (req, res) => {
 export const forgotPassword = async (req, res) => {
    try {
       const { email } = req.body;
-      console.log(email)
+      // console.log(email)
       const oldUser = await User.findOne({ email })
       if (!oldUser) {
          return res.json({ status: "User Not Exists!!" });
+      }
+      if(oldUser.isBan === true){
+         return res.status(401).json({ success: false, message: 'User is Banned.' })
       }
       const secret = process.env.JWT_SECRET_KEY + oldUser.password;
       const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, {
@@ -167,6 +172,7 @@ export const forgotPassword = async (req, res) => {
       }
       let transporter = nodemailer.createTransport(configs)
       transporter.sendMail(message);
+      res.status(200).json({ susccess: true, message: "Email send Successfully for resetting password" })
 
    } catch (error) {
       res.status(500).json({ susccess: false, message: "Failed to Forgot Password" })

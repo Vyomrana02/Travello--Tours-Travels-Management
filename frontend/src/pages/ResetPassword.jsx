@@ -43,6 +43,20 @@ const ResetPassword = () => {
             });
             return;
          }
+         const PASSEWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?]).{8,}$/;
+         if(!PASSEWORD_REGEX.test(pass)){
+            toast.error(" 💪🔒 Please input a strong password containing at least 8 characters, including uppercase, lowercase, special Symbol. 😅", {
+               position: "top-center",
+               autoClose: 5000,
+               hideProgressBar: false,
+               closeOnClick: true,
+               pauseOnHover: false,
+               draggable: true,
+               progress: undefined,
+               className: "toast-message"
+            }); 
+            return;
+         } 
          var input = window.location.href;
 
          var fields = input.split('/');
@@ -65,7 +79,20 @@ const ResetPassword = () => {
          // console.log(result.data)
 
          //  dispatch({type:"LOGIN_SUCCESS", payload:result.data})
-         navigate('/login')
+         toast.success('🔒Your password has been successfully reset! 🔒', {
+            position: "top-center",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+         });
+         window.setTimeout(()=>{
+            navigate('/login')
+          },5000);
+           
       } catch (err) {
          //  dispatch({type:"LOGIN_FAILURE", payload:err.message})
       }

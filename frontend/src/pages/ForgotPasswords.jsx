@@ -6,6 +6,7 @@ import loginImg from '../assets/images/login.png'
 import userIcon from '../assets/images/user.png'
 import { AuthContext } from '../context/AuthContext'
 import { BASE_URL } from '../utils/config'
+import { ToastContainer, toast } from 'react-toastify';
 
 const ForgotPassword = () => {
    
@@ -29,11 +30,36 @@ const handleClick = async e => {
      })
 
      const result = await res.json()
-     if(!res.ok) alert(result.message)
+     if(!res.ok){
+      toast.info("🚫  Oops! " + result.message + "❌", {
+         position: "top-center",
+         autoClose: 3000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: false,
+         draggable: true,
+         progress: undefined,
+         theme: "colored",
+      });
+      return;
+      }
      console.log(result.data)
     
     //  dispatch({type:"LOGIN_SUCCESS", payload:result.data})
-     navigate('/')
+    toast.info('📧🔑 Password reset email sent! Time to update your password! 🔐', {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+   });
+    window.setTimeout(()=>{
+      navigate('/');
+    },5000);
+     
   } catch(err) {
     //  dispatch({type:"LOGIN_FAILURE", payload:err.message})
   }
@@ -41,6 +67,19 @@ const handleClick = async e => {
 
   return (
     <section>
+      <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover={false}
+            theme="colored"
+            // toastStyle={{ backgroundColor: "white",color:"black" }}
+         />
          <Container>
             <Row>
                <Col lg='8' className='m-auto'>

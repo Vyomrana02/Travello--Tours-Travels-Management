@@ -3,29 +3,50 @@ import Booking from './../models/Booking.js'
 import nodemailer from './../node_modules/nodemailer/lib/nodemailer.js'
 // const nodemailer = require("nodemailer")
 import Razorpay from 'razorpay'
-// create new booking
+import Tour from './../models/Tour.js'
+
+const CheckOverlapping = async (prevbookings,newBooking) => {
+   var newTour = await Tour.find({title:newBooking.tourName})
+   for(let i=0;i<prevbookings.length;i++){
+      
+      const tour = await Tour.find({title:prevbookings[i].tourName})
+      var oldtourDays = parseInt(tour[0].address?.substr(0,tour[0].address.indexOf("N")))
+      var startDate = new Date(prevbookings[i].bookAt)
+      var endDate = new Date(prevbookings[i].bookAt);
+      endDate.setDate(endDate.getDate() + oldtourDays);
+      
+      var newtourDays = parseInt(newTour[0].address?.substr(0,newTour[0].address.indexOf("N")))
+      var newStartDate = new Date(newBooking.bookAt)
+      var newEndDate = new Date(newBooking.bookAt)
+      newEndDate.setDate(newEndDate.getDate() + newtourDays);
+
+      if(((startDate <= newStartDate) && (newStartDate <= endDate )) || 
+            ((startDate <= newEndDate) && (newEndDate <= endDate )) ){
+            // console.log("overlapp")
+            return false;
+      }
+   }
+   return true;
+};
+
+export const checkOverlap = async(req,res) => {
+   const newBooking = new Booking(req.body)
+   const prevbookings = await Booking.find({userEmail: req.body.userEmail});
+   const ifOverlapp = await CheckOverlapping(prevbookings,newBooking);
+   if(!ifOverlapp){
+      return res.status(500).json({success:false, message:"Your booking is overlapping with your previous booking."})
+   }
+   return res.status(200).json({success:false, message:"Not Overlapping"})
+}
+
+
 export const createBooking = async(req,res) => {
+   // console.log("ca")
    const newBooking = new Booking(req.body)
    console.log(newBooking)
    try {
-   //    let testAccount = await nodemailer.createTestAccount();
-   //    const transporter = nodemailer.createTransport({
-   //       host: 'smtp.ethereal.email',
-   //       port: 587,
-   //       secure:false,
-   //       auth: {
-   //           user: 'antwon41@ethereal.email',
-   //           pass: '67P3yazqhGZax6WY3X'
-   //       }
-   //   });
+      
      var tempp = "<h2>Thank You for booking ....</h2><br>Details<br>"+"TourName:- " + newBooking.tourName + "<br>Booking Date:- "+ newBooking.bookAt + "<br> FullName:- " + newBooking.fullName +"<br>GuestSize:-"+newBooking.guestSize + "<br>Phone No.:- " +newBooking.phone + "<br><br>Our Coordinator will soon reach to you, For further details...";
-   //   const info = await transporter.sendMail({
-   //    from: '"Fred Foo 👻" <antwon41@ethereal.email>', // sender address
-   //    to: newBooking.userEmail, // list of receivers
-   //    subject: "Hello ✔", // Subject line
-   //    // text: "<h2>Thank You for booking ....</h2><br><br><br>Details <br><br>Booking Date:- "+ newBooking.bookAt + "<br> FullName:- " + newBooking.fullName +"<br>GuestSize:-<br>"+newBooking.guestSize+"<br>Phone No.:- " +newBooking.phone + "<br>TourName:- " + newBooking.tourName + "<br>", // plain text body
-   //    html: tempp , // html body
-   //  });
    const message = {
       from : '"Travello 👻"',
       to: newBooking.userEmail,
