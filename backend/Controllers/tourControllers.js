@@ -94,13 +94,17 @@ export const getSingleTourbyname = async (req, res) => {
 export const getAllTour = async (req, res) => {
    //For pagination
    const page = parseInt(req.query.page)
+   const user = req.query.user
 
-   //console.log(page)
-
+   // console.log(user === 'admin')
    try {
-      const tours = await Tour.find({}).populate('reviews').skip(page * 8).limit(8)
-
-      res.status(200).json({ success: true, count: tours.length, message: 'Successfully', data: tours })
+      if(user === 'admin'){
+         const tours = await Tour.find().populate('reviews').skip(page * 8).limit(8)
+         res.status(200).json({ success: true, count: tours.length, message: 'Successfully', data: tours })
+      } else {
+         const tours = await Tour.find({isPaused:false}).populate('reviews').skip(page * 8).limit(8)
+         res.status(200).json({ success: true, count: tours.length, message: 'Successfully', data: tours })
+      }
    } catch (error) {
       res.status(404).json({ success: false, message: 'Not Found' })
    }
@@ -141,9 +145,32 @@ export const getFeaturedTour = async (req, res) => {
 //Get tour count 
 export const getTourCount = async(req,res) => {
    try {
-      const tourCount = await Tour.estimatedDocumentCount()
-
+      var pauseCount = 0;
+      const Tours = await Tour.find({})
+      var tourCount = 0;
+      Tours.forEach(tour => {tourCount ++; if(tour.isPaused !== undefined && tour.isPaused === true){pauseCount = pauseCount+1;} })
+      // tourCount = tourCount - pauseCount;
+      // console.log(tourCount)
+      // console.log(pauseCount)
       res.status(200).json({success:true, data:tourCount})
+   } catch (error) {
+      res.status(500).json({success:false, message: "Failed to fetch"})
+   }
+}
+
+export const pauseUnPause = async(req,res) => {
+   try {
+      const id = req.params.id
+      const tour = await Tour.findById(id)
+      if(tour.isPaused === undefined){
+         tour.isPaused = true;
+      } else {
+         tour.isPaused = !tour.isPaused;
+      }
+      const updatedTour = await Tour.findByIdAndUpdate(id, {
+         $set: tour
+      }, { new: true })
+      res.status(200).json({success:true})
    } catch (error) {
       res.status(500).json({success:false, message: "Failed to fetch"})
    }

@@ -14,7 +14,7 @@ const TourCard = ({ tour }) => {
    // var sphoto = "/static/media/1704347532714_WORKS.d42839cf.png"
    // console.log(imgs)
    return (
-      <div className='tour__card'>
+         <div className='tour__card'>
          <Card>
             <div className="tour__img">
                <img src={photo} width="300" height="200" alt="tour-img" />
@@ -29,7 +29,7 @@ const TourCard = ({ tour }) => {
                   </span>
                   <span className="tour__rating d-flex align-items-center gap-1">
                      <i class='ri-star-fill'></i> {avgRating === 0 ? null : avgRating}
-                     {totalRating === 0 ? ('Not rated') : (<span>({reviews.length})</span>)}
+                     {totalRating === 0 ? ('Not rated') : (<span>({reviews?.length})</span>)}
 
                   </span>
                </div>

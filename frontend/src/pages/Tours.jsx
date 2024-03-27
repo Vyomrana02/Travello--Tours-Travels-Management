@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
 import CommonSection from '../shared/CommonSection'
-// import tourData from '../assets/data/tours'
 import '../styles/tour.css'
 import TourCard from './../shared/TourCard'
 import SearchBar from './../shared/SearchBar'
@@ -15,15 +14,21 @@ const Tours = () => {
    const [pageCount, setPageCount] = useState(0)
    const [page, setPage] = useState(0)
    const { user } = useContext(AuthContext)
-   const { data: tours, loading, error } = useFetch(`${BASE_URL}/tours?page=${page}`)
+   const { data: tours, loading, error } = useFetch(`${BASE_URL}/tours?page=${page}&user=${user.roles}`)
    const { data: tourCount } = useFetch(`${BASE_URL}/tours/search/getTourCount`)
 
    useEffect(() => {
       const pages = Math.ceil(tourCount / 8)
+      console.log(tourCount)
+      console.log(pages)
       setPageCount(pages)
       window.scrollTo(0, 0)
    }, [page, tourCount, tours])
-
+   // useEffect(()=>{
+   //    if(user.roles === 'admin') {
+   //       tours = useFetch(`${BASE_URL}/tours?page=${page}&user=${user}`)
+   //    }
+   // },[user])
    const navigate = useNavigate();
    const AddTour = () => {
       navigate("/addTour");

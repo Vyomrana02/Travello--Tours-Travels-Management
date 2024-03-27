@@ -6,18 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 const AddTour = () => {
   const navigate = useNavigate();
-  // const [tour, setTour] = useState({
-  //   title: '',
-  //   city: '',
-  //   address: '',
-  //   distance: 0,
-  //   price: 0,
-  //   maxGroupSize: 0,
-  //   desc: '',
-  //   reviews: [],
-  //   photo: '',
-  //   featured: false
-  // })
   const [tour, setTour] = useState({
     title: '',
     city: '',

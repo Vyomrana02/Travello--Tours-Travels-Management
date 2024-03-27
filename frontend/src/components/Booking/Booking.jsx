@@ -151,10 +151,10 @@ const Booking = ({ tour, avgRating }) => {
 
          if (!checkoverlapp.ok) {
             window.scroll({
-               top: 0, 
-               left: 0, 
-               behavior: 'smooth' 
-              });
+               top: 0,
+               left: 0,
+               behavior: 'smooth'
+            });
             toast.error(result.message, {
                position: "top-center",
                autoClose: 3000,
@@ -168,108 +168,94 @@ const Booking = ({ tour, avgRating }) => {
             return
          }
 
-         let response = await fetch(`${BASE_URL}/booking/payment`, {
-            method: "POST",
+         const checkmaxGuestSize = await fetch(`${BASE_URL}/booking/CheckGuestSize`, {
+            method: 'post',
             headers: {
-               "content-type": "application/json",
+               'content-type': 'application/json'
             },
             credentials: 'include',
-            body: JSON.stringify({ amount: totalAmount, }),
-         });
-         let orderData = await response.json();
-         console.log(orderData);
+            body: JSON.stringify(booking)
+         })
 
-         var options = {
-            key: "rzp_test_WJRJTEH85W6Zn7",
-            amount: totalAmount * 100,
-            currency: "INR",
-            order_id: orderData.userId,
-            handler: async function (response) {
-               // alert(response.razorpay_payment_id);
-               const mytempfunc = () => {
-                  setBooking(prev => ({ ...prev, totalAmount: totalAmount }))
+         let resp = await checkmaxGuestSize.json();
+         console.log(resp);
+         if (resp.success == true) {
+            let response = await fetch(`${BASE_URL}/booking/payment`, {
+               method: "POST",
+               headers: {
+                  "content-type": "application/json",
+               },
+               credentials: 'include',
+               body: JSON.stringify({ amount: totalAmount, }),
+            });
+            let orderData = await response.json();
+            console.log(orderData);
+
+            var options = {
+               key: "rzp_test_WJRJTEH85W6Zn7",
+               amount: totalAmount * 100,
+               currency: "INR",
+               order_id: orderData.userId,
+               handler: async function (response) {
+                  // alert(response.razorpay_payment_id);
+                  const mytempfunc = () => {
+                     setBooking(prev => ({ ...prev, totalAmount: totalAmount }))
+                  }
+                  mytempfunc();
+                  console.log(booking)
+
+                  const res = await fetch(`${BASE_URL}/booking`, {
+                     method: 'post',
+                     headers: {
+                        'content-type': 'application/json'
+                     },
+                     credentials: 'include',
+                     body: JSON.stringify(booking)
+                  })
+
+                  const result = await res.json()
+
+                  if (!res.ok) {
+                     window.scroll({
+                        top: 0,
+                        left: 0,
+                        behavior: 'smooth'
+                     });
+                     toast.error(result.message, {
+                        position: "top-center",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                     });
+                     return
+                  }
+
+                  navigate('/thank-you')
+
                }
-               mytempfunc();
-               console.log(booking)
-
-               const res = await fetch(`${BASE_URL}/booking`, {
-                  method: 'post',
-                  headers: {
-                     'content-type': 'application/json'
-                  },
-                  credentials: 'include',
-                  body: JSON.stringify(booking)
-               })
-
-               const result = await res.json()
-
-               if (!res.ok) {
-                  window.scroll({
-                     top: 0, 
-                     left: 0, 
-                     behavior: 'smooth' 
-                    });
-                  toast.error(result.message, {
-                     position: "top-center",
-                     autoClose: 3000,
-                     hideProgressBar: false,
-                     closeOnClick: true,
-                     pauseOnHover: false,
-                     draggable: true,
-                     progress: undefined,
-                     theme: "colored",
-                  });
-                  return
-               }
-
-               navigate('/thank-you')
-         
             }
+
+            var rzp1 = window.Razorpay(options);
+            rzp1.open();
+
+         } else {
+            toast.error('🙅‍♂️ Tour has reached max group limit at specific date😔', {
+               position: "top-center",
+               autoClose: 3000,
+               hideProgressBar: false,
+               closeOnClick: true,
+               pauseOnHover: false,
+               draggable: true,
+               progress: undefined,
+               theme: "colored",
+            });
          }
 
-         var rzp1 = window.Razorpay(options);
-         rzp1.open();
-         
-         // const res = await fetch(`${BASE_URL}/booking`, {
-         //    method: 'post',
-         //    headers: {
-         //       'content-type': 'application/json'
-         //    },
-         //    credentials: 'include',
-         //    body: JSON.stringify(booking)
-         // })
-         // const result = await res.json()
-         // if(!res.ok){
-            // window.scroll({
-            //    top: 0, 
-            //    left: 0, 
-            //    behavior: 'smooth' 
-            //   });
-            // toast.error(result.message, {
-            //    position: "top-center",
-            //    autoClose: 3000,
-            //    hideProgressBar: false,
-            //    closeOnClick: true,
-            //    pauseOnHover: false,
-            //    draggable: true,
-            //    progress: undefined,
-            //    theme: "colored",
-            // });
-            // return
-         // } else {
-         //       toast.error("nicesss", {
-         //          position: "top-center",
-         //          autoClose: 3000,
-         //          hideProgressBar: false,
-         //          closeOnClick: true,
-         //          pauseOnHover: false,
-         //          draggable: true,
-         //          progress: undefined,
-         //          theme: "colored",
-         //       });
-         //       return
-         // }
-         // booking.totalAmount = totalAmount;
+
 
       } catch (error) {
          alert(error.message)
@@ -380,7 +366,7 @@ const Booking = ({ tour, avgRating }) => {
                <FormGroup className='d-flex align-items-center gap-3' >
                   <PhoneInput
                      className="number"
-                     inputStyle={{width: '100%'}}
+                     inputStyle={{ width: '100%' }}
                      country={"in"}
                      id='phone'
                      onChange={(phones) => {

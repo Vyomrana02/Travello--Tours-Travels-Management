@@ -47,6 +47,11 @@ const tourSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isPaused: {
+      type: Boolean,
+      default: false,
+      required:false,
+    }
   },
   { timestamps: true }
 );

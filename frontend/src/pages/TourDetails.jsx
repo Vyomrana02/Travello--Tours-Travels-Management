@@ -248,10 +248,10 @@ const TourDetails = () => {
    const { id } = useParams()
    const reviewMsgRef = useRef('')
    const [tourRating, setTourRating] = useState(null)
-   const { user } = useContext(AuthContext)
-
    // fetch data from database
    const { data: tour, loading, error } = useFetch(`${BASE_URL}/tours/${id}`)
+   const [pause,setPause] = useState(false)
+   const { user } = useContext(AuthContext)
 
    const { photo, title, desc, price, reviews, city, address, distance, maxGroupSize } = tour
 
@@ -259,92 +259,94 @@ const TourDetails = () => {
 
    const options = { day: 'numeric', month: 'long', year: 'numeric' }
    let weather = {
-      apiKey : "899775a68a9f80c7844d1b62fd302bec"
+      // apiKey: "899775a68a9f80c7844d1b62fd302bec"
+      apiKey:"192325ca42d869f638a1b6c888ccb104"
       // apiKey:"778113253df220e699096e92647c38be"
-      // apiKey: "3bf45b9ce7d9a207528130a07aa6bf45"
+      // apiKey: "dab439211993e605430a1ff8e028db24"
 
-  }
-//   https://home.openweathermap.org/api_keys
+   }
+   //   https://home.openweathermap.org/api_keys
 
 
-  const [weatherData,setWeatherData] = useState([]);
-  var aryDates = [];
-  function GetDates(startDate, daysToAdd) {
+   const [weatherData, setWeatherData] = useState([]);
+   var aryDates = [];
+   function GetDates(startDate, daysToAdd) {
 
-   for (var i = 0; i <= daysToAdd; i++) {
-       var currentDate = new Date();
-       currentDate.setDate(startDate.getDate() + i);
-       aryDates.push(DayAsString(currentDate.getDay()) + ", " + currentDate.getDate() + " " + MonthAsString(currentDate.getMonth()));
+      for (var i = 0; i <= daysToAdd; i++) {
+         var currentDate = new Date();
+         currentDate.setDate(startDate.getDate() + i);
+         aryDates.push(DayAsString(currentDate.getDay()) + ", " + currentDate.getDate() + " " + MonthAsString(currentDate.getMonth()));
+      }
+
+      return aryDates;
    }
 
-   return aryDates;
-}
+   function MonthAsString(monthIndex) {
+      var d = new Date();
+      var month = new Array();
+      month[0] = "January";
+      month[1] = "February";
+      month[2] = "March";
+      month[3] = "April";
+      month[4] = "May";
+      month[5] = "June";
+      month[6] = "July";
+      month[7] = "August";
+      month[8] = "September";
+      month[9] = "October";
+      month[10] = "November";
+      month[11] = "December";
 
-function MonthAsString(monthIndex) {
-   var d = new Date();
-   var month = new Array();
-   month[0] = "January";
-   month[1] = "February";
-   month[2] = "March";
-   month[3] = "April";
-   month[4] = "May";
-   month[5] = "June";
-   month[6] = "July";
-   month[7] = "August";
-   month[8] = "September";
-   month[9] = "October";
-   month[10] = "November";
-   month[11] = "December";
+      return month[monthIndex];
+   }
 
-   return month[monthIndex];
-}
+   function DayAsString(dayIndex) {
+      var weekdays = new Array(7);
+      weekdays[0] = "Sunday";
+      weekdays[1] = "Monday";
+      weekdays[2] = "Tuesday";
+      weekdays[3] = "Wednesday";
+      weekdays[4] = "Thursday";
+      weekdays[5] = "Friday";
+      weekdays[6] = "Saturday";
 
-function DayAsString(dayIndex) {
-   var weekdays = new Array(7);
-   weekdays[0] = "Sunday";
-   weekdays[1] = "Monday";
-   weekdays[2] = "Tuesday";
-   weekdays[3] = "Wednesday";
-   weekdays[4] = "Thursday";
-   weekdays[5] = "Friday";
-   weekdays[6] = "Saturday";
+      return weekdays[dayIndex];
+   }
 
-   return weekdays[dayIndex];
-}
+   function getWeatherData(latitude, longitude, units, unitdeg, unitspeed) {
 
-  function getWeatherData(latitude, longitude, units, unitdeg, unitspeed){
-      
-   fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=${units}&appid=${weather.apiKey}`).then((rep)=>{
-       return rep.json();
-   }).then((rep)=>{
-       const weatherdata = rep;
-       setWeatherData(weatherdata.daily)
-       console.log(weatherdata.daily)
-      //  showweatherdata(weatherdata, unitdeg, unitspeed)
-   }).catch(()=>{
-       console.log("error")
-   })
-   
-}
+      fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=${units}&appid=${weather.apiKey}`).then((rep) => {
+         return rep.json();
+      }).then((rep) => {
+         const weatherdata = rep;
+         setWeatherData(weatherdata.daily)
+         // console.log(weatherdata.daily)
+         //  showweatherdata(weatherdata, unitdeg, unitspeed)
+      }).catch(() => {
+         console.log("error")
+      })
 
-  useEffect(()=>{
-   fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${weather.apiKey}`).then((resp)=>{
-        if(resp.ok){
+   }
+
+   useEffect(() => {
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${weather.apiKey}`).then((resp) => {
+         if (resp.ok) {
             return resp.json();
-        }        
-    }).then((resp)=>{
-      console.log(city)
-        console.log(resp);
+         }
+         setPause(tour.isPaused)
+      }).then((resp) => {
+         // console.log(city)
+         // console.log(resp);
 
-      //   cityName.textContent = resp.name;
-        console.log(resp.coord.lat)
-              getWeatherData(resp.coord.lat,resp.coord.lon,"metric","c","mt/s");
-        
-    }).catch((err)=>{
-        console.log("something got error",err);
-    })
-    
-  })
+         //   cityName.textContent = resp.name;
+         // console.log(resp.coord.lat)
+         getWeatherData(resp.coord.lat, resp.coord.lon, "metric", "c", "mt/s");
+
+      }).catch((err) => {
+         console.log("something got error", err);
+      })
+
+   })
    const navigate = useNavigate();
    const submitHandler = async e => {
       e.preventDefault()
@@ -354,7 +356,7 @@ function DayAsString(dayIndex) {
          if (!user || user === undefined || user === null) {
             alert('Please sign in')
          }
-         
+
          const reviewObj = {
             userEmail: user.email,
             username: user?.username,
@@ -383,11 +385,11 @@ function DayAsString(dayIndex) {
 
          if (!res.ok) {
             window.scroll({
-               top: 0, 
-               left: 0, 
-               behavior: 'smooth' 
-              });
-            
+               top: 0,
+               left: 0,
+               behavior: 'smooth'
+            });
+
             toast(result.message + ' 😊', {
                position: "top-center",
                autoClose: 3000,
@@ -398,14 +400,14 @@ function DayAsString(dayIndex) {
                progress: undefined,
                theme: "dark",
             });
-            return 
+            return
          }
          window.scroll({
-            top: 0, 
-            left: 0, 
-            behavior: 'smooth' 
-           });
-         
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+         });
+
          toast('🙏🏼 We appreciate your review! 😊', {
             position: "top-center",
             autoClose: 3000,
@@ -416,8 +418,8 @@ function DayAsString(dayIndex) {
             progress: undefined,
             theme: "dark",
          });
-         
-         const refresing = ()  => {
+
+         const refresing = () => {
             window.location.reload();
          }
          setTimeout(refresing, 3000);
@@ -435,7 +437,7 @@ function DayAsString(dayIndex) {
    }, [tour])
 
    const ratingChanged = (newRating) => {
-      console.log(newRating);
+      // console.log(newRating);
       setTourRating(newRating)
    };
 
@@ -443,14 +445,14 @@ function DayAsString(dayIndex) {
       var answer = window.confirm("Are you sure you want to Delete Tour?");
       if (answer) {
          try {
-            console.log(tour);
+            // console.log(tour);
             const res = await fetch(`${BASE_URL}/tours/${tour._id}`, {
                method: 'delete',
                credentials: 'include'
             })
 
             const result = res.json()
-            console.log(result)
+            // console.log(result)
             //  if(!res.ok) alert(result.message)
 
             //   setTour(result)
@@ -461,39 +463,107 @@ function DayAsString(dayIndex) {
          }
       }
       else {
-         
+
       }
 
    }
-   
+
+   const pauseTour = async () => {
+      // console.log('called')
+
+      try {
+         const res = await fetch(`${BASE_URL}/tours/pauseUnpause/${id}`, {
+            method: 'get',
+            headers: {
+               'content-type': 'application/json'
+            },
+            credentials: 'include',
+         })
+         const result = await res.json()
+         if (!res.ok) {
+            alert(result.message)
+         } else {
+               toast.info('🙏🏼 Tour is Pause successfully 😊', {
+                  position: "top-center",
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: false,
+                  draggable: true,
+                  progress: undefined,
+               });
+            setPause(!pause)
+         }
+         setTimeout(()=>{
+            window.location.reload();
+         },3000)
+      } catch (err) {
+         alert(err.message)
+      }
+   }
+
+   const unpauseTour = async () => {
+      // console.log('called')
+      try {
+         const res = await fetch(`${BASE_URL}/tours/pauseUnpause/${id}`, {
+            method: 'get',
+            headers: {
+               'content-type': 'application/json'
+            },
+            credentials: 'include',
+         })
+         const result = await res.json()
+         if (!res.ok) {
+            alert(result.message)
+         } else {
+               toast.info('🙏🏼 Tour is unPause successfully 😊', {
+                  position: "top-center",
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: false,
+                  draggable: true,
+                  progress: undefined,
+               });
+            
+            setPause(!pause)
+         }
+         setTimeout(()=>{
+            window.location.reload();
+         },3000)
+      } catch (err) {
+         alert(err.message)
+      }
+   }
    aryDates = GetDates(new Date(), 7)
    return (
       <section>
-          <ToastContainer
-               position="top-center"
-               autoClose={5000}
-               hideProgressBar={false}
-               newestOnTop
-               closeOnClick
-               rtl={false}
-               pauseOnFocusLoss
-               draggable
-               pauseOnHover={false}
-               theme="colored"
-            />
+         <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover={false}
+            theme="colored"
+         />
          <Container>
-            <Row>
-               <Col>
-            <div className="tour__info mb-4">
-                  <p><b>Next 7 Days Weather Prediction</b><br></br></p>
-                        {console.log(aryDates)}
+            {(weatherData!==undefined && weatherData.length !== 0) ?
+               <Row>
+                  <Col>
+                     <div className="tour__info mb-4">
+                        <p><b>Next 7 Days Weather Prediction</b><br></br></p>
+                        {/* {console.log(aryDates)} */}
                         <Row>
-                        {aryDates.map((aryDate, i) => <Col>{aryDate}</Col>)}
+                           {aryDates.map((aryDate, i) => <Col>{aryDate}</Col>)}
                         </Row>
                         <br></br>
                         <Row>
-                          
-                          {/* </Row>{((weatherData && weatherData.length !== 0) ?
+
+                           {/* </Row>{((weatherData && weatherData.length !== 0) ?
                            //<> */}
                            <Col>{weatherData[0]?.weather[0]?.description}</Col>
                            <Col>{weatherData[1]?.weather[0]?.description}</Col>
@@ -507,9 +577,10 @@ function DayAsString(dayIndex) {
                            <></>)
                         } */}
                         </Row>
-                  </div>
+                     </div>
                   </Col>
-            </Row>
+               </Row>
+               : <></>}
             {loading && <h4 className='text-center pt-5'>LOADING.........</h4>}
             {error && <h4 className='text-center pt-5'>{error}</h4>}
             {
@@ -533,7 +604,10 @@ function DayAsString(dayIndex) {
                               // </div>
                               <>
                                  <Container>
-                                    <p><Button onClick={UpdateTour}>Update Tour</Button>       <Button onClick={DeleteTour}>Delete Tour</Button>
+                                    <p><Button onClick={UpdateTour}>Update Tour</Button>       <Button className="btn btn-danger" onClick={DeleteTour}>Delete Tour</Button>     
+                                    {tour.isPaused === false ? <Button className="btn btn-warning" onClick={pauseTour}>Pause Bookings</Button> : <Button className="btn btn-warning" onClick={unpauseTour}>unPause Bookings</Button>}
+                                      
+
                                     </p>
                                  </Container></> :
                               <></>) :
