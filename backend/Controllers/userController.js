@@ -43,9 +43,12 @@ export const updateUser = async (req, res) => {
          }
          let transporter = nodemailer.createTransport(configs)
          transporter.sendMail(message);
+         req.body.isBan = true;
       } 
-      console.log(req.body)
-      const user = await User.findById(req.body._id)
+      // console.log(req.body)
+      // console.log(id)
+      const user = await User.findById(id)
+      // console.log(user)
       if(user.isBan === true && req.body.isBan === false){
          var tempp = "Dear " + req.body.username +" ,<br>We are pleased to inform you that your account on the Travello website has been successfully unbanned. You now have full access to all features and functionalities of our platform.<br><br>We apologize for any inconvenience caused by the temporary suspension and appreciate your patience throughout the process. Your satisfaction and enjoyment of Travello are important to us, and we are committed to providing you with a positive experience.<br><br>Should you have any questions or concerns, please don't hesitate to contact our support team at support@travello.com. We're here to assist you and ensure that your time on Travello is both enjoyable and rewarding.<br><br>Thank you for being a valued member of our community. We look forward to seeing you back on Travello!<br><br>Best regards,<br>Travello Team"
          const message = {
@@ -65,13 +68,20 @@ export const updateUser = async (req, res) => {
          }
          let transporter = nodemailer.createTransport(configs)
          transporter.sendMail(message);
+         req.body.isBan = false;
       }
-      const updatedUser = await User.findByIdAndUpdate(id, {
-         $set: req.body
-      }, { new: true })
-
+      const updatedUser = await User.findByIdAndUpdate(id, 
+         {
+            username:req.body.username,
+            password:req.body.password,
+            email:req.body.email,
+            isBan:req.body.isBan
+         }
+      , { new: true })
+      // console.log("Fgg")
       res.status(200).json({ success: true, message: 'Successfully updated', data: updatedUser })
    } catch (error) {
+      console.log(error)
       res.status(500).json({ success: false, message: 'Failed to update' })
    }
 }

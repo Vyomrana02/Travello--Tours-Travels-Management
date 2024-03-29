@@ -250,7 +250,7 @@ const TourDetails = () => {
    const [tourRating, setTourRating] = useState(null)
    // fetch data from database
    const { data: tour, loading, error } = useFetch(`${BASE_URL}/tours/${id}`)
-   const [pause,setPause] = useState(false)
+   const [pause, setPause] = useState(false)
    const { user } = useContext(AuthContext)
 
    const { photo, title, desc, price, reviews, city, address, distance, maxGroupSize } = tour
@@ -260,7 +260,7 @@ const TourDetails = () => {
    const options = { day: 'numeric', month: 'long', year: 'numeric' }
    let weather = {
       // apiKey: "899775a68a9f80c7844d1b62fd302bec"
-      apiKey:"192325ca42d869f638a1b6c888ccb104"
+      apiKey: "192325ca42d869f638a1b6c888ccb104"
       // apiKey:"778113253df220e699096e92647c38be"
       // apiKey: "dab439211993e605430a1ff8e028db24"
 
@@ -313,40 +313,36 @@ const TourDetails = () => {
       return weekdays[dayIndex];
    }
 
-   function getWeatherData(latitude, longitude, units, unitdeg, unitspeed) {
-
-      fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=${units}&appid=${weather.apiKey}`).then((rep) => {
-         return rep.json();
-      }).then((rep) => {
-         const weatherdata = rep;
-         setWeatherData(weatherdata.daily)
-         // console.log(weatherdata.daily)
-         //  showweatherdata(weatherdata, unitdeg, unitspeed)
-      }).catch(() => {
-         console.log("error")
-      })
-
-   }
 
    useEffect(() => {
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${weather.apiKey}`).then((resp) => {
-         if (resp.ok) {
-            return resp.json();
-         }
-         setPause(tour.isPaused)
-      }).then((resp) => {
-         // console.log(city)
-         // console.log(resp);
+      // console.log(weather.apiKey)
+      // console.log(city)
+      if (city != undefined) {
 
-         //   cityName.textContent = resp.name;
-         // console.log(resp.coord.lat)
-         getWeatherData(resp.coord.lat, resp.coord.lon, "metric", "c", "mt/s");
+         fetch(`https://api.openweathermap.org/data/2.5/forecast?appid=${weather.apiKey}&q=${city}`).then((resp) => {
+            if (resp.ok) {
+               return resp.json();
+            }
+            setPause(tour.isPaused)
+         }).then((resp) => {
+            // console.log(city)
+            // console.log(resp);
+            const weatherdata = resp;
+            // console.log(resp)
+            setWeatherData(weatherdata.list)
+            // console.log(weatherdata.list)
+            //   cityName.textContent = resp.name;
+            // console.log(resp.coord.lat)
+            // getWeatherData(resp.coord.lat, resp.coord.lon, "metric", "c", "mt/s");
+   
+         }).catch((err) => {
+            console.log("something got error", err);
+         })
+      }
+      // fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${weather.apiKey}`).then((resp) => {
+      // https://api.openweathermap.org/data/2.5/forecast?appid=899775a68a9f80c7844d1b62fd302bec&q=ahmedabad
 
-      }).catch((err) => {
-         console.log("something got error", err);
-      })
-
-   })
+   },[city])
    const navigate = useNavigate();
    const submitHandler = async e => {
       e.preventDefault()
@@ -483,20 +479,20 @@ const TourDetails = () => {
          if (!res.ok) {
             alert(result.message)
          } else {
-               toast.info('🙏🏼 Tour is Pause successfully 😊', {
-                  position: "top-center",
-                  autoClose: 3000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: false,
-                  draggable: true,
-                  progress: undefined,
-               });
+            toast.info('🙏🏼 Tour is Pause successfully 😊', {
+               position: "top-center",
+               autoClose: 3000,
+               hideProgressBar: false,
+               closeOnClick: true,
+               pauseOnHover: false,
+               draggable: true,
+               progress: undefined,
+            });
             setPause(!pause)
          }
-         setTimeout(()=>{
+         setTimeout(() => {
             window.location.reload();
-         },3000)
+         }, 3000)
       } catch (err) {
          alert(err.message)
       }
@@ -516,21 +512,21 @@ const TourDetails = () => {
          if (!res.ok) {
             alert(result.message)
          } else {
-               toast.info('🙏🏼 Tour is unPause successfully 😊', {
-                  position: "top-center",
-                  autoClose: 3000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: false,
-                  draggable: true,
-                  progress: undefined,
-               });
-            
+            toast.info('🙏🏼 Tour is unPause successfully 😊', {
+               position: "top-center",
+               autoClose: 3000,
+               hideProgressBar: false,
+               closeOnClick: true,
+               pauseOnHover: false,
+               draggable: true,
+               progress: undefined,
+            });
+
             setPause(!pause)
          }
-         setTimeout(()=>{
+         setTimeout(() => {
             window.location.reload();
-         },3000)
+         }, 3000)
       } catch (err) {
          alert(err.message)
       }
@@ -551,7 +547,7 @@ const TourDetails = () => {
             theme="colored"
          />
          <Container>
-            {(weatherData!==undefined && weatherData.length !== 0) ?
+            {(weatherData !== undefined) ?
                <Row>
                   <Col>
                      <div className="tour__info mb-4">
@@ -566,13 +562,13 @@ const TourDetails = () => {
                            {/* </Row>{((weatherData && weatherData.length !== 0) ?
                            //<> */}
                            <Col>{weatherData[0]?.weather[0]?.description}</Col>
-                           <Col>{weatherData[1]?.weather[0]?.description}</Col>
-                           <Col>{weatherData[2]?.weather[0]?.description}</Col>
-                           <Col>{weatherData[3]?.weather[0]?.description}</Col>
-                           <Col>{weatherData[4]?.weather[0]?.description}</Col>
                            <Col>{weatherData[5]?.weather[0]?.description}</Col>
-                           <Col>{weatherData[6]?.weather[0]?.description}</Col>
-                           <Col>{weatherData[7]?.weather[0]?.description}</Col>
+                           <Col>{weatherData[10]?.weather[0]?.description}</Col>
+                           <Col>{weatherData[15]?.weather[0]?.description}</Col>
+                           <Col>{weatherData[20]?.weather[0]?.description}</Col>
+                           <Col>{weatherData[25]?.weather[0]?.description}</Col>
+                           <Col>{weatherData[30]?.weather[0]?.description}</Col>
+                           <Col>{weatherData[35]?.weather[0]?.description}</Col>
                            {/* </> :
                            <></>)
                         } */}
@@ -604,9 +600,8 @@ const TourDetails = () => {
                               // </div>
                               <>
                                  <Container>
-                                    <p><Button onClick={UpdateTour}>Update Tour</Button>       <Button className="btn btn-danger" onClick={DeleteTour}>Delete Tour</Button>     
-                                    {tour.isPaused === false ? <Button className="btn btn-warning" onClick={pauseTour}>Pause Bookings</Button> : <Button className="btn btn-warning" onClick={unpauseTour}>unPause Bookings</Button>}
-                                      
+                                    <p><Button onClick={UpdateTour}>Update Tour</Button>       <Button className="btn btn-danger" onClick={DeleteTour}>Delete Tour</Button> {tour.isPaused === false ? <Button className="btn btn-warning" onClick={pauseTour}>Pause Bookings</Button> : <Button className="btn btn-warning" onClick={unpauseTour}>unPause Bookings</Button>}
+
 
                                     </p>
                                  </Container></> :

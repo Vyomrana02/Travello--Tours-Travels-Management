@@ -42,7 +42,7 @@ export const register = async (req, res) => {
       const link = `http://localhost:4000/api/v1/auth/registerNew/${token}`;
       // console.log(link);
       // var tempp = "<h2>Thank You for booking ....</h2><br>Details<br>"+"TourName:- " + newBooking.tourName + "<br>Booking Date:- "+ newBooking.bookAt + "<br> FullName:- " + newBooking.fullName +"<br>GuestSize:-"+newBooking.guestSize + "<br>Phone No.:- " +newBooking.phone + "<br><br>Our Coordinator will soon reach to you, For further details...";
-      var tempp = "Hello " + username + ", <br> <br> Are you ready to gain access to all of the assets we prepared for Travello? " + email  + ".<br><br>First, you must complete your registration by clicking on the button below: <br>" + link   + " <br><br>This link will verify your email address, and then you’ll officially be a part of the Travelllo community. <br> See you there!,<br><br> The Travello Team"
+      var tempp = "Hello " + username + ", <br> <br> Are you ready to gain access to all of the assets we prepared for Travello? " + email  + ".<br><br>First, you must complete your registration by clicking on the button below: <br> <br> <a href="+ link +" style='display: inline-block; background-color: #007bff; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px;'>Verify Email</a><br><br>This link will verify your email address, and then you’ll officially be a part of the Travelllo community. <br> See you there!,<br><br> The Travello Team"
       const message = {
          from : '"Travello 👻"',
          to: email,

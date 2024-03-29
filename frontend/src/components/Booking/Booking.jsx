@@ -25,7 +25,8 @@ const Booking = ({ tour, avgRating }) => {
       phone: 8490066177,
       guestSize: 0,
       bookAt: '',
-      totals: 0
+      totals: 0,
+      isCancelled:false
    })
 
    const handleChange = e => {

@@ -33,7 +33,7 @@ const CheckOverlapping = async (prevbookings,newBooking) => {
 
 export const checkOverlap = async(req,res) => {
    const newBooking = new Booking(req.body)
-   const prevbookings = await Booking.find({userEmail: req.body.userEmail});
+   const prevbookings = await Booking.find({userEmail: req.body.userEmail, isCancelled:false});
    const ifOverlapp = await CheckOverlapping(prevbookings,newBooking);
    if(!ifOverlapp){
       return res.status(500).json({success:false, message:"Your booking is overlapping with your previous booking."})

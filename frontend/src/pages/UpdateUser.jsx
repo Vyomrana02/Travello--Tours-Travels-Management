@@ -6,12 +6,13 @@ import registerImg from '../assets/images/login.png'
 import userIcon from '../assets/images/user.png'
 import { AuthContext } from '../context/AuthContext'
 import { BASE_URL } from '../utils/config'
+import { ToastContainer, toast } from 'react-toastify';
 
 const UpdateUser = () => {
 
    const { user, dispatch } = useContext(AuthContext)
    const [credentials, setCredentials] = useState({
-      userName: user.username,
+      username: user.username,
       email: user.email ,
       password: user.password 
    })
@@ -54,8 +55,36 @@ const UpdateUser = () => {
    const handleClick = async e => {
       e.preventDefault()
         console.log(user._id)
+        const PASSEWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?]).{8,}$/;
+        const EMAIL_REGEX = /^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$/
+        if(!PASSEWORD_REGEX.test(credentials.password)){
+         toast.error(" 💪🔒 Please input a strong password containing at least 8 characters, including uppercase, lowercase, special Symbol. 😅", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            className: "toast-message"
+         }); 
+         return;
+      } 
+      if(!EMAIL_REGEX.test(credentials.email)) {
+         toast.error("📧 Provide a valid email address adhering to the standard format, including username, @ symbol, and domain. 😅", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            className: "toast-message"
+         }); 
+         return;
+      } 
       try {
-        user.username = credentials.userName;
+        user.username = credentials.username;
         user.email = credentials.email;
         user.password = credentials.password;
          const res = await fetch(`${BASE_URL}/users/${user._id}`, {
@@ -64,11 +93,24 @@ const UpdateUser = () => {
                'content-type':'application/json'
             },
             credentials:'include',
-            body:JSON.stringify(credentials)
+            body: JSON.stringify(credentials)
         })
         const result = await res.json()
         
-        if(!res.ok) alert(result.message)
+        if(!res.ok){
+         alert(result.message)
+         // toast.error('🙅‍♂️ This Email is already taken. 😊', {
+         //    position: "top-center",
+         //    autoClose: 3000,
+         //    hideProgressBar: false,
+         //    closeOnClick: true,
+         //    pauseOnHover: false,
+         //    draggable: true,
+         //    progress: undefined,
+         // });
+         // window.location.reload();
+         return;
+        }
         // logout(result.data);
         const datas = {
             email: result.data.email,
@@ -85,6 +127,18 @@ const UpdateUser = () => {
    }
    return (
       <section>
+         <ToastContainer
+               position="top-center"
+               autoClose={5000}
+               hideProgressBar={false}
+               newestOnTop
+               closeOnClick
+               rtl={false}
+               pauseOnFocusLoss
+               draggable
+               pauseOnHover={false}
+               theme="colored"
+            />
          <Container>
             <Row>
                <Col lg='8' className='m-auto'>

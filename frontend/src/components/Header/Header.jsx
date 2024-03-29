@@ -4,6 +4,8 @@ import { NavLink, Link, useNavigate } from 'react-router-dom'
 import Logo from '../../assets/images/logo.png'
 import "./header.css"
 import { AuthContext } from '../../context/AuthContext'
+import Dropdown from 'react-bootstrap/Dropdown';
+
 const nav__links = [
    {
       path: '/home',
@@ -72,26 +74,26 @@ const Header = () => {
       navigate('/update-user')
    }
 
-   useEffect(() => {
-      const script = document.createElement("script")
+   // useEffect(() => {
+   //    const script = document.createElement("script")
 
-      script.src =
-         "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+   //    script.src =
+   //       "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
 
-      script.async = true
+   //    script.async = true
 
-      script.integrity =
-         "sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+   //    script.integrity =
+   //       "sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
 
-      script.crossOrigin = "anonymous"
+   //    script.crossOrigin = "anonymous"
 
-      document.body.appendChild(script)
-      // console.log(user)
-      return () => {
-         // clean up the script when the component in unmounted
-         document.body.removeChild(script)
-      }
-   })
+   //    document.body.appendChild(script)
+   //    // console.log(user)
+   //    return () => {
+   //       // clean up the script when the component in unmounted
+   //       document.body.removeChild(script)
+   //    }
+   // })
 
    const mybooking = () => {
       navigate('/bookings')
@@ -127,10 +129,11 @@ const Header = () => {
                                        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
                                           {user.username}
                                        </button>
-                                       <ul className="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
+                                       <ul className="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2" style={{"max-height":"10px;"}}>
                                           <li><a className="dropdown-item" onClick={mybooking}>My Bookings</a></li>
                                           <li><a className="dropdown-item" onClick={updateUser}>Update Profile</a></li>
                                           <li><a className="dropdown-item" onClick={logout}>Logout</a></li>
+                                          {/* <li>Logout</li> */}
                                        </ul>
                                     </div>
                                  </> : <>
@@ -164,7 +167,7 @@ const Header = () => {
                            <div className="nav__btns d-flex align-items-center gap-2">
                               {
                                  user ? <>
-                                    <div className="dropdown">
+                                    {/* <div className="dropdown">
                                        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
                                           {user.username}
                                        </button>
@@ -173,7 +176,18 @@ const Header = () => {
                                           <li><a className="dropdown-item" onClick={updateUser}>Update Profile</a></li>
                                           <li><a className="dropdown-item" onClick={logout}>Logout</a></li>
                                        </ul>
-                                    </div>
+                                    </div> */}
+                                    <Dropdown>
+                                       <Dropdown.Toggle style={{'backgroundColor':'#faa935','borderColor':'#ffffff'}} id="dropdown-basic">
+                                       {user.username}
+                                       </Dropdown.Toggle>
+
+                                       <Dropdown.Menu>
+                                       <Dropdown.Item onClick={mybooking} style={{"line-height":"50px"}} >My Bookings</Dropdown.Item>
+                                       <Dropdown.Item onClick={updateUser} style={{"line-height":"50px"}}>Update Profile</Dropdown.Item>
+                                       <Dropdown.Item onClick={logout} style={{"line-height":"50px"}}>Logout</Dropdown.Item>
+                                       </Dropdown.Menu>
+                                    </Dropdown>
                                  </> : <>
                                     <Button className='btn secondary__btn'><Link to='/login'>Login</Link></Button>
                                     <Button className='btn primary__btn'><Link to='/register'>Register</Link></Button>
@@ -204,19 +218,32 @@ const Header = () => {
                            <div className="nav__btns d-flex align-items-center gap-2">
                               {
                                  user ? <>
-                                    <div className="dropdown">
+                                    {/* <div className="dropdown">
                                        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
                                           {user.username}
                                        </button>
                                        <ul className="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
                                           {user==='user' ? 
                                           <li><a className="dropdown-item" onClick={mybooking}>My Bookings</a></li>
-                                          : <></>}
+                                          
                                           
                                           <li><a className="dropdown-item" onClick={updateUser}>Update Profile</a></li>
                                           <li><a className="dropdown-item" onClick={logout}>Logout</a></li>
                                        </ul>
-                                    </div>
+                                    </div> */}
+                                    <Dropdown>
+                                       <Dropdown.Toggle id="dropdown-basic" style={{'backgroundColor':'#faa935','borderColor':'#ffffff'}}>
+                                       {user.username}
+                                       </Dropdown.Toggle>
+
+                                       <Dropdown.Menu>
+                                       {user==='user' ? 
+                                       <Dropdown.Item onClick={mybooking} style={{"line-height":"50px"}} >My Bookings</Dropdown.Item>
+                                       : <></>}
+                                       <Dropdown.Item onClick={updateUser} style={{"line-height":"50px"}}>Update Profile</Dropdown.Item>
+                                       <Dropdown.Item onClick={logout} style={{"line-height":"50px"}}>Logout</Dropdown.Item>
+                                       </Dropdown.Menu>
+                                    </Dropdown>
                                  </> : <>
                                     <Button className='btn secondary__btn'><Link to='/login'>Login</Link></Button>
                                     <Button className='btn primary__btn'><Link to='/register'>Register</Link></Button>
