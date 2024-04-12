@@ -45,7 +45,6 @@ const handleClick = async e => {
       }
      console.log(result.data)
     
-    //  dispatch({type:"LOGIN_SUCCESS", payload:result.data})
     toast.info('📧🔑 Password reset email sent! Time to update your password! 🔐', {
       position: "top-center",
       autoClose: 3000,

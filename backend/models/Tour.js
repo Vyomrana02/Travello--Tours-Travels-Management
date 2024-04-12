@@ -51,6 +51,10 @@ const tourSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
       required:false,
+    },
+    pickUppoint:{
+      type:String,
+      required:false
     }
   },
   { timestamps: true }

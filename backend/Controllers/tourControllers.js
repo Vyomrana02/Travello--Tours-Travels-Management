@@ -1,17 +1,6 @@
 import Tour from '../models/Tour.js'
 
-//Create new tour
-// export const createTour = async (req, res) => {
-//    const newTour = new Tour(req.body)
 
-//    try {
-//       const savedTour = await newTour.save()
-
-//       res.status(200).json({ success: true, message: 'Successfully created', data: savedTour })
-//    } catch (error) {
-//       res.status(500).json({ success: true, message: 'Failed to create. Try again!' })
-//    }
-// }
 export const createTour = async (req, res) => {
    var newTour = new Tour(req.body)
    console.log(req);
@@ -33,9 +22,7 @@ export const updateTour = async (req, res) => {
    console.log(req.body)
    console.log(id)
    if (req.file) {
-      // const image = req.file.filename;
       req.body.photo = "/uploads/" + req.file.filename;
-      // updates.image = image;
   }
    try {
 
@@ -95,10 +82,8 @@ export const getAllTour = async (req, res) => {
    //For pagination
    const page = parseInt(req.query.page)
    const user = req.query.user
-
-   // console.log(user === 'admin')
    try {
-      if(user === 'admin'){
+      if(user == 'admin'){
          const tours = await Tour.find().populate('reviews').skip(page * 8).limit(8)
          res.status(200).json({ success: true, count: tours.length, message: 'Successfully', data: tours })
       } else {
@@ -121,7 +106,7 @@ export const getTourBySearch = async (req, res) => {
 
    try {
       // gte means greater than equal
-      const tours = await Tour.find({ city, distance: { $gte: distance }, maxGroupSize: { $gte: maxGroupSize } }).populate('reviews')
+      const tours = await Tour.find({ city, distance: { $gte: distance }, maxGroupSize: { $gte: maxGroupSize },isPaused:false }).populate('reviews')
 
       res.status(200).json({ success: true, message: 'Successfully', data: tours })
    } catch (error) {
@@ -149,9 +134,6 @@ export const getTourCount = async(req,res) => {
       const Tours = await Tour.find({})
       var tourCount = 0;
       Tours.forEach(tour => {tourCount ++; if(tour.isPaused !== undefined && tour.isPaused === true){pauseCount = pauseCount+1;} })
-      // tourCount = tourCount - pauseCount;
-      // console.log(tourCount)
-      // console.log(pauseCount)
       res.status(200).json({success:true, data:tourCount})
    } catch (error) {
       res.status(500).json({success:false, message: "Failed to fetch"})

@@ -4,58 +4,79 @@ import jwt from 'jsonwebtoken'
 import nodemailer from './../node_modules/nodemailer/lib/nodemailer.js'
 import { jwtDecode } from 'jwt-decode' // import dependency
 
-// user register
-// export const register = async (req, res) => {
-//    try {
-//       //hashing password
-      // const salt = bcrypt.genSaltSync(10)
-      // const hash = bcrypt.hashSync(req.body.password, salt)
-
-      // const newUser = new User({
-      //    username: req.body.username,
-      //    email: req.body.email,
-      //    password: hash,
-      //    photo: req.body.photo
-      // })
-
-      // await newUser.save()
-
-      // res.status(200).json({ success: true, message: "Successfully created!" })
-//    } catch (error) {
-//       res.status(500).json({ success: false, message: "Failed to create! Try again." })
-//    }
-// }
 export const register = async (req, res) => {
    try {
       //hashing password
-      const { email,username,password } = req.body;
-      // console.log(req.body)
-      
+      const { email, username, password } = req.body;
+
       const oldUser = await User.findOne({ email })
       if (oldUser != null) {
-         return res.status(500).json({ success: false,message: "User Already exists Exists!!" });
+         return res.status(500).json({ success: false, message: "User Already exists Exists!!" });
       }
       const secret = process.env.JWT_SECRET_KEY + "ABCDE";
-      const token = jwt.sign({ email: email,username:username,password:password }, secret, {
+      const token = jwt.sign({ email: email, username: username, password: password }, secret, {
          expiresIn: "5m",
       });
       const link = `http://localhost:4000/api/v1/auth/registerNew/${token}`;
-      // console.log(link);
-      // var tempp = "<h2>Thank You for booking ....</h2><br>Details<br>"+"TourName:- " + newBooking.tourName + "<br>Booking Date:- "+ newBooking.bookAt + "<br> FullName:- " + newBooking.fullName +"<br>GuestSize:-"+newBooking.guestSize + "<br>Phone No.:- " +newBooking.phone + "<br><br>Our Coordinator will soon reach to you, For further details...";
-      var tempp = "Hello " + username + ", <br> <br> Are you ready to gain access to all of the assets we prepared for Travello? " + email  + ".<br><br>First, you must complete your registration by clicking on the button below: <br> <br> <a href="+ link +" style='display: inline-block; background-color: #007bff; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px;'>Verify Email</a><br><br>This link will verify your email address, and then you’ll officially be a part of the Travelllo community. <br> See you there!,<br><br> The Travello Team"
+      var tempp = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Travello Registration</title>
+          <style>
+              /* CSS styles */
+              body {
+                  font-family: Arial, sans-serif;
+                  background-color: #f2f2f2;
+                  margin: 0;
+                  padding: 0;
+              }
+              .container {
+                  max-width: 600px;
+                  margin: 20px auto;
+                  background-color: #fff;
+                  padding: 20px;
+                  border-radius: 10px;
+                  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+              }
+              .button {
+                  display: inline-block;
+                  background-color: #007bff;
+                  color: #ffffff;
+                  text-decoration: none;
+                  padding: 10px 20px;
+                  border-radius: 5px;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="container">
+              <h2>Hello ${username},</h2>
+              <p>Are you ready to gain access to all of the assets we prepared for Travello? ${email}.</p>
+              <p>First, you must complete your registration by clicking on the button below:</p>
+              <p><a href="${link}" class="button">Verify Email</a></p>
+              <p>This link will verify your email address, and then you’ll officially be a part of the Travelllo community.</p>
+              <p>See you there!</p>
+              <p>The Travello Team</p>
+          </div>
+      </body>
+      </html>
+      `;
       const message = {
-         from : '"Travello 👻"',
+         from: '"Travello 👻"',
          to: email,
          subject: "🆗 Let's get your account verified! 🕵️‍♀️🔐",
          html: tempp
       }
-   
-   
+
+
       let configs = {
          service: 'gmail',
-         auth:{
-            user:process.env.EMAIL,
-            pass:process.env.PASSWORD
+         auth: {
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD
          }
       }
       let transporter = nodemailer.createTransport(configs)
@@ -68,34 +89,31 @@ export const register = async (req, res) => {
    }
 }
 
-export const registerget = async(req,res) =>{
-   try{
+export const registerget = async (req, res) => {
+   try {
       const { token } = req.params;
       const secret = process.env.JWT_SECRET_KEY + "ABCDE";
       try {
          const verify = jwt.verify(token, secret);
-       //   res.render("index", { email: verify.email, status: "Not Verified" });
-       // res.writeHead(302, {'Location': 'http://localhost:3000/reset-password/' , 'Content-Type': 'application/json'});
-       // res.end({tokens:token,ids:id});
-       const user = jwtDecode(token)
-      //  console.log(user)
-       const { email,username,password } = user;
-       const salt = bcrypt.genSaltSync(10)
-       const hash = bcrypt.hashSync(password, salt)
- 
-       const newUser = new User({
-          username: username,
-          email: email,
-          password: hash,
-       })
- 
-       await newUser.save()
-       return res.redirect('http://localhost:3000/login')
-       } catch (error) {
+
+         const user = jwtDecode(token)
+         const { email, username, password } = user;
+         const salt = bcrypt.genSaltSync(10)
+         const hash = bcrypt.hashSync(password, salt)
+
+         const newUser = new User({
+            username: username,
+            email: email,
+            password: hash,
+         })
+
+         await newUser.save()
+         return res.redirect('http://localhost:3000/login')
+      } catch (error) {
          console.log(error);
          res.send("Not Verified");
-       }
-   }catch(error){
+      }
+   } catch (error) {
       res.status(500).json({ success: false, message: "Failed to create! Try again." })
    }
 }
@@ -110,7 +128,7 @@ export const login = async (req, res) => {
       if (!user) {
          return res.status(404).json({ success: false, message: 'User not found!' })
       }
-      if(user.isBan === true){
+      if (user.isBan === true) {
          return res.status(401).json({ success: false, message: 'User is Banned.' })
       }
       // if user is exist then check the passord or compare the password
@@ -139,12 +157,11 @@ export const login = async (req, res) => {
 export const forgotPassword = async (req, res) => {
    try {
       const { email } = req.body;
-      // console.log(email)
       const oldUser = await User.findOne({ email })
       if (!oldUser) {
          return res.json({ status: "User Not Exists!!" });
       }
-      if(oldUser.isBan === true){
+      if (oldUser.isBan === true) {
          return res.status(401).json({ success: false, message: 'User is Banned.' })
       }
       const secret = process.env.JWT_SECRET_KEY + oldUser.password;
@@ -152,22 +169,66 @@ export const forgotPassword = async (req, res) => {
          expiresIn: "5m",
       });
       const link = `http://localhost:4000/api/v1/auth/reset-password/${oldUser._id}/${token}`;
-      console.log(link);
-      // var tempp = "<h2>Thank You for booking ....</h2><br>Details<br>"+"TourName:- " + newBooking.tourName + "<br>Booking Date:- "+ newBooking.bookAt + "<br> FullName:- " + newBooking.fullName +"<br>GuestSize:-"+newBooking.guestSize + "<br>Phone No.:- " +newBooking.phone + "<br><br>Our Coordinator will soon reach to you, For further details...";
-      var tempp = "Hello " + oldUser.username + ", <br> <br> Somebody requested a new password for the Travello account associated with " + email  + ".<br><br>No changes have been made to your account yet. You can reset your password by clicking the link below: <br>" + link   + " <br><br>If you did not request a new password, please let us know immediately by replying to this email.<br> Yours,<br><br> The Travello Team"
+
+      var tempp = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Travello Password Reset</title>
+          <style>
+              /* CSS styles */
+              body {
+                  font-family: Arial, sans-serif;
+                  background-color: #f2f2f2;
+                  margin: 0;
+                  padding: 0;
+              }
+              .container {
+                  max-width: 600px;
+                  margin: 20px auto;
+                  background-color: #fff;
+                  padding: 20px;
+                  border-radius: 10px;
+                  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+              }
+              a.button {
+                  display: inline-block;
+                  background-color: #007bff;
+                  color: #ffffff;
+                  text-decoration: none;
+                  padding: 10px 20px;
+                  border-radius: 5px;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="container">
+              <h2>Hello ${oldUser.username},</h2>
+              <p>Somebody requested a new password for the Travello account associated with ${email}.</p>
+              <p>No changes have been made to your account yet. You can reset your password by clicking the link below:</p>
+              <p><a href="${link}" class="button">Reset Password</a></p>
+              <p>If you did not request a new password, please let us know immediately by replying to this email.</p>
+              <p>Yours,</p>
+              <p>The Travello Team</p>
+          </div>
+      </body>
+      </html>
+      `;
       const message = {
-         from : '"Travello 👻"',
+         from: '"Travello 👻"',
          to: email,
          subject: "📨🔓 I'll assist you in resetting your password.",
          html: tempp
       }
-   
-   
+
+
       let configs = {
          service: 'gmail',
-         auth:{
-            user:process.env.EMAIL,
-            pass:process.env.PASSWORD
+         auth: {
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD
          }
       }
       let transporter = nodemailer.createTransport(configs)
@@ -180,63 +241,53 @@ export const forgotPassword = async (req, res) => {
 }
 
 
-export const resetPassGet = async (req,res) => {
+export const resetPassGet = async (req, res) => {
    try {
       const { id, token } = req.params;
-      console.log(req.params);
       const oldUser = await User.findOne({ _id: id });
       if (!oldUser) {
-        return res.json({ status: "User Not Exists!!" });
+         return res.json({ status: "User Not Exists!!" });
       }
       const secret = process.env.JWT_SECRET_KEY + oldUser.password;
       try {
-        const verify = jwt.verify(token, secret);
-      //   res.render("index", { email: verify.email, status: "Not Verified" });
-      // res.writeHead(302, {'Location': 'http://localhost:3000/reset-password/' , 'Content-Type': 'application/json'});
-      // res.end({tokens:token,ids:id});
-      return res.redirect('http://localhost:3000/reset-password/'+id+'/'+token)
+         const verify = jwt.verify(token, secret);
+         return res.redirect('http://localhost:3000/reset-password/' + id + '/' + token)
       } catch (error) {
-        console.log(error);
-        res.send("Not Verified");
+         console.log(error);
+         res.send("Not Verified");
       }
    } catch (error) {
       res.status(500).json({ susccess: false, message: "Failed to Reset Password" })
    }
 }
 
-export const resetPassPost = async (req,res) => {
+export const resetPassPost = async (req, res) => {
    // const { id, token } = req.params;
    const id = req.params.id
    const token = req.params.token
-  const { pass } = req.body;
-  console.log(pass)
-  console.log(id)
-  console.log(token)
-//   console.log(req.body)
-  const oldUser = await User.findOne({ _id: id });
-  if (!oldUser) {
-    return res.json({ status: "User Not Exists!!" });
-  }
-  const secret = process.env.JWT_SECRET_KEY + oldUser.password;
-  try {
-    const verify = jwt.verify(token, secret);
-    const encryptedPassword = await bcrypt.hash(pass, 10);
-    await User.updateOne(
-      {
-        _id: id,
-      },
-      {
-        $set: {
-          password: encryptedPassword,
-        },
-      }
-    );
-    res.status(200).json({ success: true, message: "Successfully created!" })
-   //  res.render("index", { email: verify.email, status: "verified" });
-   // return res.redirect('http://localhost:3000/login')
-   
-  } catch (error) {
-    console.log(error);
-    res.json({ status: "Something Went Wrong" });
-  }
+   const { pass } = req.body;
+   const oldUser = await User.findOne({ _id: id });
+   if (!oldUser) {
+      return res.json({ status: "User Not Exists!!" });
+   }
+   const secret = process.env.JWT_SECRET_KEY + oldUser.password;
+   try {
+      const verify = jwt.verify(token, secret);
+      const encryptedPassword = await bcrypt.hash(pass, 10);
+      await User.updateOne(
+         {
+            _id: id,
+         },
+         {
+            $set: {
+               password: encryptedPassword,
+            },
+         }
+      );
+      res.status(200).json({ success: true, message: "Successfully created!" })
+
+   } catch (error) {
+      console.log(error);
+      res.json({ status: "Something Went Wrong" });
+   }
 }

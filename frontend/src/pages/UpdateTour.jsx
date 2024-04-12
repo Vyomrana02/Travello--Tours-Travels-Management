@@ -5,18 +5,6 @@ import axios from 'axios'
 import { useNavigate, useLocation } from 'react-router-dom'
 const UpdateTour = (tours) => {
   const navigate = useNavigate();
-  // const [tour, setTour] = useState({
-  //   title: '',
-  //   city: '',
-  //   address: '',
-  //   distance: 0,
-  //   price: 0,
-  //   maxGroupSize: 0,
-  //   desc: '',
-  //   reviews: [],
-  //   photo: '',
-  //   featured: false
-  // })
   const [photos,changephotos] = useState(false);
   const location = useLocation();
   const [tour, setTour] = useState({
@@ -29,6 +17,7 @@ const UpdateTour = (tours) => {
     desc: location.state.desc,
     reviews: [],
     photo: location.state.photo,
+    pickUppoint:location.state.pickUppoint
   })
   const [featured, setfeatured] = React.useState(location.state.featured);
   const handleCheckBox = (event) => {
@@ -49,29 +38,12 @@ const UpdateTour = (tours) => {
     formData.append("price", tour.price)
     formData.append("maxGroupSize", tour.maxGroupSize)
     formData.append("desc", tour.desc)
+    formData.append("pickUppoint",tour.pickUppoint)
     if(photos){
-      console.log("my")
       formData.append("photo", tour.photo)
     }
     formData.append("featured",featured)
-    // try {
-    //    const res = await fetch(`${BASE_URL}/tours/${location.state._id}`, {
-    //       method:'put',
-    //       headers:{
-    //         'content-type':'application/json'
-    //       },
-    //       body: JSON.stringify(formData)
-    //    })
-    //    const result = await res.json()
-
-    //    if(!res.ok) alert(result.message)
-
-    //    navigate('/tours')
-    // } catch(err) {
-    //   console.log(err.message)
-    //    alert(err.message)
-    // }
-
+   
     axios.put(`${BASE_URL}/tours/${location.state._id}`, formData, {
       withCredentials: true, headers: {
         'Access-Control-Allow-Origin': 'true',
@@ -91,38 +63,7 @@ const UpdateTour = (tours) => {
     console.log(tour)
   }
 
-  // useEffect(() => {
-  //   console.log(location.state)
-  //   // async function myfunction(){
-  //   //     var mytourid = localStorage.getItem('UpdatingTour')
-  //   //     try {
-  //   //      const res = await fetch(`${BASE_URL}/tours/${mytourid}`, {
-  //   //         method:'get',
-  //   //         headers: {
-  //   //             'content-type': 'application/json'
-  //   //          },
-  //   //      })
-
-  //   //      const result = await res.json()
-  //   //      console.log(result.data)
-  //   //      if(!res.ok) alert(result.message)
-  
-  //   //     // setTour(result.data)
-  //   //     const updatedValue = {"title":"juice"};
-  //   //     // setTour(prev => ({...prev,...updatedValue}));
-  //   //     setTour(result.data)
-  //   //     console.log(tour)
-  //   //     //  navigate('/login')
-  //   //   } catch(err) {
-  //   //     console.log(err.message)
-  //   //      alert(err.message)
-  //   //   }
-  //   // }
-  //   // myfunction();
-  //   // console.log(tour)
-  //   console.log(featured)
-  // }, [])
-
+ 
 
   return (
 
@@ -130,10 +71,16 @@ const UpdateTour = (tours) => {
       <div className="mb-3">
         <label for="exampleFormControlInput1" className="form-label">Title</label>
         <input type="text" className="form-control" placeholder={location.state.title} id="title" onChange={handleChange} />
-      </div>
-      <div className="mb-3">
+      </div> <div className='row'>
+      <div className="mb-1 col-6">
         <label for="exampleFormControlInput1" className="form-label">City</label>
-        <input type="text" className="form-control" placeholder={location.state.city} id="city" onChange={handleChange} />
+        <input type="text" className="form-control" placeholder={location.state.city} id="city" onChange={handleChange} required/>
+      </div>
+      
+      <div className="mb-1 col-6">
+        <label for="exampleFormControlInput1" className="form-label">Pick Up point</label>
+        <input type="text" className="form-control" placeholder={location.state.pickUppoint} id="pickUppoint" onChange={handleChange} required/>
+      </div>
       </div>
       <div className='row'>
         <div className="mb-3 col-6">

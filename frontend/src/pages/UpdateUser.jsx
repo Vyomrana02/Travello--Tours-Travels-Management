@@ -17,21 +17,14 @@ const UpdateUser = () => {
       password: user.password 
    })
 
-//    const {dispatch} = useContext(AuthContext)
    const navigate = useNavigate()
 
    const handleChange = e => {
       setCredentials(prev => ({ ...prev, [e.target.id]: e.target.value }))
    }
-//    useEffect(()=>{
-//     console.log(user);
-//    },[])
 
  const Loggin = async (datas) => {
-    // e.preventDefault()
-
-    // dispatch({type:'LOGIN_START'})
-
+  
     try {
        const res = await fetch(`${BASE_URL}/auth/login`, {
           method:'post',
@@ -99,28 +92,15 @@ const UpdateUser = () => {
         
         if(!res.ok){
          alert(result.message)
-         // toast.error('🙅‍♂️ This Email is already taken. 😊', {
-         //    position: "top-center",
-         //    autoClose: 3000,
-         //    hideProgressBar: false,
-         //    closeOnClick: true,
-         //    pauseOnHover: false,
-         //    draggable: true,
-         //    progress: undefined,
-         // });
-         // window.location.reload();
+
          return;
         }
-        // logout(result.data);
         const datas = {
             email: result.data.email,
             password: credentials.password
          }
         console.log(datas)
         Loggin(datas)
-        //  localStorage.setItem("user",JSON.stringify(result.data))
-        //  dispatch({payload:result.data})
-        //  navigate('/')
       } catch(err) {
          alert(err.message)
       }

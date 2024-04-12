@@ -16,6 +16,7 @@ const AddTour = () => {
     desc: '',
     reviews: [],
     photo: '',
+    pickUppoint:'',
     featured: false
   })
   const [days,setdays] = useState(0);
@@ -26,7 +27,7 @@ const AddTour = () => {
   const handleSubmit = async e => {
     console.log(tour);
     e.preventDefault()
-    if(tour.title =='' || tour.city=='' || tour.distance==0 || tour.price==0 ||tour.maxGroupSize==0 || tour.desc=="" || tour.photo==""){
+    if(tour.title =='' || tour.city=='' || tour.distance==0 || tour.price==0 ||tour.maxGroupSize==0 || tour.desc=="" || tour.photo=="" || tour.pickUppoint==''){
       toast.error('📋✏️ Please Fill out all details 😊', {
         position: "top-center",
         autoClose: 3000,
@@ -49,6 +50,7 @@ const AddTour = () => {
     formData.append("maxGroupSize",tour.maxGroupSize)
     formData.append("desc",tour.desc)
     formData.append("photo",tour.photo)
+    formData.append("pickUppoint",tour.pickUppoint)
     console.log(formData)
       axios.post(`${BASE_URL}/tours/`,formData,{ withCredentials: true ,headers: {
         'Access-Control-Allow-Origin': 'true', 
@@ -94,9 +96,16 @@ const AddTour = () => {
         <label for="exampleFormControlInput1" className="form-label">Title</label>
         <input type="text" className="form-control" id="title" onChange={handleChange} required/>
       </div>
-      <div className="mb-3">
+      <div className='row'>
+      <div className="mb-1 col-6">
         <label for="exampleFormControlInput1" className="form-label">City</label>
         <input type="text" className="form-control" id="city" onChange={handleChange} required/>
+      </div>
+      
+      <div className="mb-1 col-6">
+        <label for="exampleFormControlInput1" className="form-label">Pick Up point</label>
+        <input type="text" className="form-control" id="pickUppoint" onChange={handleChange} required/>
+      </div>
       </div>
       <div className='row'>
         <div className="mb-1 col-3">

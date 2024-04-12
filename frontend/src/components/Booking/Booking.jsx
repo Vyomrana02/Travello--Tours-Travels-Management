@@ -9,10 +9,9 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import Razorpay from 'razorpay'
 import { Helmet } from "react-helmet";
 const Booking = ({ tour, avgRating }) => {
-   const { price, reviews, title } = tour
+   const { price, reviews, title ,pickUppoint} = tour
    const navigate = useNavigate()
 
    const { user } = useContext(AuthContext)
@@ -26,7 +25,8 @@ const Booking = ({ tour, avgRating }) => {
       guestSize: 0,
       bookAt: '',
       totals: 0,
-      isCancelled:false
+      isCancelled:false,
+      pickUppoint:pickUppoint
    })
 
    const handleChange = e => {
@@ -43,7 +43,6 @@ const Booking = ({ tour, avgRating }) => {
          setBooking(prev => ({ ...prev, totals: totalAmount }))
 
       } else {
-         // toast("")
          window.scrollTo(0, 0)
          toast.error('🦄 Booking date is should be greater than the current date.', {
             position: "top-center",
@@ -55,7 +54,6 @@ const Booking = ({ tour, avgRating }) => {
             progress: undefined,
             theme: "colored",
          });
-         // alert('Booking date is should be greater than the current date.');
          e.target.value = '';
       }
    }
@@ -99,11 +97,6 @@ const Booking = ({ tour, avgRating }) => {
    const serviceFee = 10
    const totalAmount = Number(price) * Number(booking.guestSize) + Number(serviceFee)
 
-   // const setPhone = (phone) => {
-   //    console.log(phone)
-   //    phones = phone;
-   // }
-   // const [phones,setPhones] = useState(0);
    const handleClick = async e => {
       e.preventDefault()
       console.log(booking)
@@ -125,7 +118,6 @@ const Booking = ({ tour, avgRating }) => {
 
          console.log(booking)
          if (booking.fullName === '' || booking.bookAt === '' || booking.guestSize === 0) {
-            // alert('Please Complete all Fields')
             toast.error('Please Complete all Fields', {
                position: "top-center",
                autoClose: 3000,
@@ -198,7 +190,6 @@ const Booking = ({ tour, avgRating }) => {
                currency: "INR",
                order_id: orderData.userId,
                handler: async function (response) {
-                  // alert(response.razorpay_payment_id);
                   const mytempfunc = () => {
                      setBooking(prev => ({ ...prev, totalAmount: totalAmount }))
                   }
@@ -263,74 +254,7 @@ const Booking = ({ tour, avgRating }) => {
       }
    }
 
-   // return (
-   //    <div className='booking'>
-   // <Helmet>
-   // <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-   //    </Helmet>
-   // <div className="booking__top d-flex align-items-center justify-content-between">
-   //    <h3>₹{price} <span>/per person</span></h3>
-   //    <span className="tour__rating d-flex align-items-center">
-   //       <i class='ri-star-fill' style={{ 'color': 'var(--secondary-color)' }}></i>
-   //       {avgRating === 0 ? null : avgRating} ({reviews?.length})
-   //    </span>
-   // </div>
-
-   //       {/* =============== BOOKING FORM START ============== */}
-   // <div className="booking__form">
-   //    <h5>Information</h5>
-   //    <Form className='booking__info-form' onSubmit={handleClick}>
-   //       <FormGroup>
-   //          <input type="text" placeholder='Full Name' id='fullName' required
-   //             onChange={handleChange} />
-   //       </FormGroup>
-   //       {/* <FormGroup>
-   //          <input type="tel" placeholder='Phone' id='phone' required
-   //             onChange={handleChange} />
-   //       </FormGroup> */}
-   //       <PhoneInput
-   //            className="number"
-   //            country={"in"}
-   //            value={booking.phone}
-   //            id='phone'
-   //          //   onChange={(phone) =>
-   //          //    setPhones(phone)}
-   //          onChange={(phones) => {
-   //             setBooking(prev => ({...prev,phone:phones}))
-   //          }}
-   //            />
-   //       <FormGroup className='d-flex align-items-center gap-3'>
-   //          <input type="date" placeholder='' id='bookAt' required
-   //             onChange={handleBookAt} />
-   //          <input type="number" placeholder='Guest' id='guestSize' required
-   //             onChange={handleGuestSize} />
-   //       </FormGroup>
-   //    </Form>
-   // </div>
-   //       {/* =============== BOOKING FORM END ================ */}
-
-
-   //       {/* =============== BOOKING BOTTOM ================ */}
-   // <div className="booking__bottom">
-   //    <ListGroup>
-   //       <ListGroupItem className='border-0 px-0'>
-   //          <h5 className='d-flex align-items-center gap-1'>₹{price} <i class='ri-close-line'></i> 1 person</h5>
-   //          <span> ₹{price}</span>
-   //       </ListGroupItem>
-   //       <ListGroupItem className='border-0 px-0'>
-   //          <h5>Service charge</h5>
-   //          <span>₹{serviceFee}</span>
-   //       </ListGroupItem>
-   //       <ListGroupItem className='border-0 px-0 total'>
-   //          <h5>Total</h5>
-   //          <span>₹{totalAmount}</span>
-   //       </ListGroupItem>
-   //    </ListGroup>
-
-   //    <Button className='btn primary__btn w-100 mt-4' onClick={handleClick}>Book Now</Button>
-   // </div>
-   //    </div>
-   // )
+   
    return (
       <div className="booking">
          <ToastContainer
@@ -375,15 +299,7 @@ const Booking = ({ tour, avgRating }) => {
                      }}
                   />
                </FormGroup>
-               {/* <PhoneInput
-                    className="number"
-                    country={"in"}
-                    value={booking.phone}
-                    id='phone'
-                  onChange={(phones) => {
-                     setBooking(prev => ({...prev,phone:phones}))
-                  }}
-                    /> */}
+            
                <FormGroup className='d-flex align-items-center gap-3'>
                   <input type="date" placeholder='' id='bookAt' required
                      onChange={handleBookAt} />
@@ -397,8 +313,8 @@ const Booking = ({ tour, avgRating }) => {
          <div className="booking__bottom">
             <ListGroup>
                <ListGroupItem className='border-0 px-0'>
-                  <h5 className='d-flex align-items-center gap-1'>₹{price} <i class='ri-close-line'></i> 1 person</h5>
-                  <span> ₹{price}</span>
+                  <h5 className='d-flex align-items-center gap-1'>₹{price} <i class='ri-close-line'></i> {booking.guestSize} person</h5>
+                  <span> ₹{booking.guestSize*price}</span>
                </ListGroupItem>
                <ListGroupItem className='border-0 px-0'>
                   <h5>Service charge</h5>

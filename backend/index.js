@@ -8,12 +8,8 @@ import userRoute from './routes/users.js'
 import authRoute from './routes/auth.js'
 import reviewRoute from './routes/reviews.js'
 import bookingRoute from './routes/bookings.js'
-import subRoute from './routes/subscribers.js'
-import Stripe from "stripe";
-// import multer from "multer"
-// const upload = multer({ dest: 'uploads/' })
 dotenv.config()
-// const express = require("express")
+
 const app = express()
 const port = process.env.PORT || 8000
 const corsOptions = {
@@ -21,7 +17,7 @@ const corsOptions = {
    credentials: true,
    // optionSuccessStatus:200
 }
-// const stripe = Stripe(process.env.STRIPE_API_KEY);
+
 
 mongoose.set("strictQuery", false)
 const connect = async() => {
@@ -41,13 +37,13 @@ app.use(express.json())
 app.use(cors(corsOptions))
 app.set("view engine","ejs");
 app.use(cookieParser())
-// app.use(multer({dest:'./uploads/'}).single('uploads'));
+
 app.use("/api/v1/auth", authRoute)
 app.use("/api/v1/tours", tourRoute)
 app.use("/api/v1/users", userRoute)
 app.use("/api/v1/review", reviewRoute)
 app.use("/api/v1/booking", bookingRoute)
-app.use("/api/v1/sub",subRoute)
+
 
 app.listen(port, () => {
    connect()

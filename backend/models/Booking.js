@@ -35,7 +35,11 @@ const bookingSchema = new mongoose.Schema(
       isCancelled:{
          type:Boolean,
          required:false
-      }
+      },
+      pickUppoint:{
+         type:String,
+         required:false
+       }
    },
    { timestamps: true }
 );
