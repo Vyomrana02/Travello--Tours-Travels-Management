@@ -32,6 +32,9 @@ Travello is a web application designed to facilitate tour booking, management, a
 - **Payment**: Integration with Razorpay for all types of payments and QR code.
 - **Weather API**: Integration with a weather API for weather forecasts.
 
+## Video 
+https://drive.google.com/file/d/1aNFr3oomh2aMMT0022Xd1XPWyRLz23Vq/view?usp=drive_link
+
 ## Getting Started
 
 To run the application locally, follow these steps:
