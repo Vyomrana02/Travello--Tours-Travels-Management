@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import nodemailer from './../node_modules/nodemailer/lib/nodemailer.js'
 import { jwtDecode } from 'jwt-decode' // import dependency
+import { BASE_URL_CLIENT, BASE_URL_SERVER } from "../utils/config.js";
 
 export const register = async (req, res) => {
    try {
@@ -17,7 +18,7 @@ export const register = async (req, res) => {
       const token = jwt.sign({ email: email, username: username, password: password }, secret, {
          expiresIn: "5m",
       });
-      const link = `http://localhost:4000/api/v1/auth/registerNew/${token}`;
+      const link = `${BASE_URL_SERVER}/api/v1/auth/registerNew/${token}`;
       var tempp = `
       <!DOCTYPE html>
       <html lang="en">
@@ -108,7 +109,7 @@ export const registerget = async (req, res) => {
          })
 
          await newUser.save()
-         return res.redirect('http://localhost:3000/login')
+         return res.redirect(`${BASE_URL_CLIENT}/login`)
       } catch (error) {
          console.log(error);
          res.send("Not Verified");
@@ -168,7 +169,7 @@ export const forgotPassword = async (req, res) => {
       const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, {
          expiresIn: "5m",
       });
-      const link = `http://localhost:4000/api/v1/auth/reset-password/${oldUser._id}/${token}`;
+      const link = `${BASE_URL_SERVER}/api/v1/auth/reset-password/${oldUser._id}/${token}`;
 
       var tempp = `
       <!DOCTYPE html>
@@ -251,7 +252,7 @@ export const resetPassGet = async (req, res) => {
       const secret = process.env.JWT_SECRET_KEY + oldUser.password;
       try {
          const verify = jwt.verify(token, secret);
-         return res.redirect('http://localhost:3000/reset-password/' + id + '/' + token)
+         return res.redirect(`${BASE_URL_CLIENT}/reset-password/` + id + "/" + token)
       } catch (error) {
          console.log(error);
          res.send("Not Verified");
