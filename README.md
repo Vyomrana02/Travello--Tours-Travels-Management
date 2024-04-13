@@ -34,6 +34,8 @@ Travello is a web application designed to facilitate tour booking, management, a
 
 ## Video 
 https://drive.google.com/file/d/1aNFr3oomh2aMMT0022Xd1XPWyRLz23Vq/view?usp=drive_link
+[![Demo CountPages alpha](https://share.gifyoutube.com/KzB6Gb.gif)](https://drive.google.com/file/d/1aNFr3oomh2aMMT0022Xd1XPWyRLz23Vq/view?usp=drive_link)
+
 
 ## Getting Started
 
