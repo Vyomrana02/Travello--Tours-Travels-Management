@@ -12,11 +12,7 @@ dotenv.config()
 
 const app = express()
 const port = process.env.PORT || 8000
-const corsOptions = {
-   origin: true,
-   credentials: true,
-   // optionSuccessStatus:200
-}
+app.use(cors())
 
 
 mongoose.set("strictQuery", false)
@@ -34,14 +30,6 @@ const connect = async() => {
 }
 
 app.use(express.json())
-//app.use(cors())
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://travello-tours-and-travels.onrender.com');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true'); // If your request requires credentials
-  next();
-});
 app.set("view engine","ejs");
 app.use(cookieParser())
 
