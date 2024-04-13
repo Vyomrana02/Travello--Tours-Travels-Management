@@ -12,7 +12,16 @@ dotenv.config()
 
 const app = express()
 const port = process.env.PORT || 8000
-app.use(cors())
+
+app.use((req, res, next) => {
+  const allowedOrigins = ['https://travello-tours-and-travels.onrender.com'];
+  const origin = req.headers.origin;
+   res.setHeader('Access-Control-Allow-Origin', 'no-cors');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // If your request requires credentials
+  next();
+});
 
 
 mongoose.set("strictQuery", false)
