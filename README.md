@@ -40,3 +40,20 @@ To run the application locally, follow these steps:
 
    ```bash
    git clone https://github.com/your-username/travello.git
+
+2. Install dependencies:
+
+   ```bash
+   cd travello
+   npm install
+
+3. Set up environment variables: Create a .env file in the root directory and add the necessary environment variables, such as database connection string, API keys, etc
+   
+4. Start the development server:
+
+   ```bash
+   npm start
+
+Contributing
+Contributions are welcome! If you have any ideas for new features, optimizations, or bug fixes, feel free to open an issue or submit a pull request.
+
