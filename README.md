@@ -39,7 +39,7 @@ To run the application locally, follow these steps:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/travello.git
+   git clone https://github.com/Vyomrana02/Travello--Tours-Travels-Management.git
 
 2. Install dependencies:
 
