@@ -34,7 +34,7 @@ const connect = async() => {
 }
 
 app.use(express.json())
-app.use(cors())
+//app.use(cors())
 app.set("view engine","ejs");
 app.use(cookieParser())
 
