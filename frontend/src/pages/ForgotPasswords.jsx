@@ -60,7 +60,6 @@ const handleClick = async e => {
     },5000);
      
   } catch(err) {
-    //  dispatch({type:"LOGIN_FAILURE", payload:err.message})
   }
 }
 
@@ -77,7 +76,6 @@ const handleClick = async e => {
             draggable
             pauseOnHover={false}
             theme="colored"
-            // toastStyle={{ backgroundColor: "white",color:"black" }}
          />
          <Container>
             <Row>

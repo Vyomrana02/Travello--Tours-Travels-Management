@@ -73,28 +73,6 @@ const Header = () => {
       e.preventDefault()
       navigate('/update-user')
    }
-
-   // useEffect(() => {
-   //    const script = document.createElement("script")
-
-   //    script.src =
-   //       "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-
-   //    script.async = true
-
-   //    script.integrity =
-   //       "sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-
-   //    script.crossOrigin = "anonymous"
-
-   //    document.body.appendChild(script)
-   //    // console.log(user)
-   //    return () => {
-   //       // clean up the script when the component in unmounted
-   //       document.body.removeChild(script)
-   //    }
-   // })
-
    const mybooking = () => {
       navigate('/bookings')
    }
@@ -133,7 +111,6 @@ const Header = () => {
                                           <li><a className="dropdown-item" onClick={mybooking}>My Bookings</a></li>
                                           <li><a className="dropdown-item" onClick={updateUser}>Update Profile</a></li>
                                           <li><a className="dropdown-item" onClick={logout}>Logout</a></li>
-                                          {/* <li>Logout</li> */}
                                        </ul>
                                     </div>
                                  </> : <>
@@ -167,16 +144,6 @@ const Header = () => {
                            <div className="nav__btns d-flex align-items-center gap-2">
                               {
                                  user ? <>
-                                    {/* <div className="dropdown">
-                                       <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                                          {user.username}
-                                       </button>
-                                       <ul className="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-                                          <li><a className="dropdown-item" onClick={mybooking}>My Bookings</a></li>
-                                          <li><a className="dropdown-item" onClick={updateUser}>Update Profile</a></li>
-                                          <li><a className="dropdown-item" onClick={logout}>Logout</a></li>
-                                       </ul>
-                                    </div> */}
                                     <Dropdown>
                                        <Dropdown.Toggle style={{'backgroundColor':'#faa935','borderColor':'#ffffff'}} id="dropdown-basic">
                                        {user.username}
@@ -218,19 +185,6 @@ const Header = () => {
                            <div className="nav__btns d-flex align-items-center gap-2">
                               {
                                  user ? <>
-                                    {/* <div className="dropdown">
-                                       <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                                          {user.username}
-                                       </button>
-                                       <ul className="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-                                          {user==='user' ? 
-                                          <li><a className="dropdown-item" onClick={mybooking}>My Bookings</a></li>
-                                          
-                                          
-                                          <li><a className="dropdown-item" onClick={updateUser}>Update Profile</a></li>
-                                          <li><a className="dropdown-item" onClick={logout}>Logout</a></li>
-                                       </ul>
-                                    </div> */}
                                     <Dropdown>
                                        <Dropdown.Toggle id="dropdown-basic" style={{'backgroundColor':'#faa935','borderColor':'#ffffff'}}>
                                        {user.username}

@@ -11,8 +11,8 @@ import Pagination from '../utils/Pagination';
 let PageSize = 10;
 const MyBookings = () => {
     const { user } = useContext(AuthContext)
-  
-  
+
+
     const [currentPage, setCurrentPage] = useState(1);
     const [mybooks, setmybooks] = useState([]);
     const navigate = useNavigate()
@@ -34,7 +34,7 @@ const MyBookings = () => {
             alert(err.message)
         }
     }
-    
+
     const getAllBookings = async () => {
         try {
             console.log(user)
@@ -53,19 +53,19 @@ const MyBookings = () => {
             alert(err.message)
         }
     }
-    const currentTableData =  useMemo(() => {
+    const currentTableData = useMemo(() => {
         const firstPageIndex = (currentPage - 1) * PageSize;
         const lastPageIndex = firstPageIndex + PageSize;
         return mybooks.slice(firstPageIndex, lastPageIndex);
-      }, [currentPage,mybooks]);
-  
+    }, [currentPage, mybooks]);
+
     useEffect(() => {
         if (user.roles === 'user') {
             getMyBookings();
         }
         else {
             getAllBookings();
-        }  
+        }
     }, []);
 
     const navstotour = async (e) => {
@@ -111,28 +111,28 @@ const MyBookings = () => {
             pauseOnHover: false,
             draggable: true,
             progress: undefined,
-         });
-        setTimeout(()=>{
+        });
+        setTimeout(() => {
             window.location.reload();
-        },3000)
+        }, 3000)
         return () => { }
     }
     const todayDate = new Date();
     return (
         <div className='container'>
             <ToastContainer
-               position="top-center"
-               autoClose={5000}
-               hideProgressBar={false}
-               newestOnTop
-               closeOnClick
-               rtl={false}
-               pauseOnFocusLoss
-               draggable
-               pauseOnHover={false}
-               theme="colored"
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme="colored"
             />
-            <div style={{"color":"red" , "fontWeight":"bold"}}>* Cancelled Bookings are Marked as Red.</div>
+            <div style={{ "color": "red", "fontWeight": "bold" }}>* Cancelled Bookings are Marked as Red.</div>
             <table className="table">
                 <thead>
                     <tr>
@@ -145,8 +145,8 @@ const MyBookings = () => {
                         <th scope="col">Booked At</th>
                         <th scope="col">Tour Date</th>
                         {user && user.roles === 'admin' ? <></> :
-                        <th scope="col">Cancel Tour</th>}
-                        
+                            <th scope="col">Cancel Tour</th>}
+
                     </tr>
                 </thead>
                 {currentTableData.map(function (data) {
@@ -154,17 +154,17 @@ const MyBookings = () => {
                         <tbody>
                             {data.isCancelled ? <>
                                 <tr>
-                                    <th onClick={navstotour} style={{"color":"red" , "fontWeight":"bold"}}>{data.tourName}</th>
-                                    <td style={{"color":"red" , "fontWeight":"bold"}}>{data.fullName}</td>
-                                    <td style={{"color":"red" , "fontWeight":"bold"}}>{data.guestSize}</td>
-                                    <td style={{"color":"red" , "fontWeight":"bold"}}>+{data.phone.toString().slice(0, 2)} {data.phone.toString().slice(2)}</td>
-                                    <td style={{"color":"red" , "fontWeight":"bold"}}>{data.totals}</td>
-                                    <td style={{"color":"red" , "fontWeight":"bold"}}>{data.pickUppoint}</td>
-                                    <td style={{"color":"red" , "fontWeight":"bold"}}>{dateFormat(data.createdAt, "mmmm dS, yyyy")}</td>
-                                    <td style={{"color":"red" , "fontWeight":"bold"}}>{dateFormat(data.bookAt, "mmmm dS, yyyy")}</td>
-                        <td></td>
+                                    <th onClick={navstotour} style={{ "color": "red", "fontWeight": "bold" }}>{data.tourName}</th>
+                                    <td style={{ "color": "red", "fontWeight": "bold" }}>{data.fullName}</td>
+                                    <td style={{ "color": "red", "fontWeight": "bold" }}>{data.guestSize}</td>
+                                    <td style={{ "color": "red", "fontWeight": "bold" }}>+{data.phone.toString().slice(0, 2)} {data.phone.toString().slice(2)}</td>
+                                    <td style={{ "color": "red", "fontWeight": "bold" }}>{data.totals}</td>
+                                    <td style={{ "color": "red", "fontWeight": "bold" }}>{data.pickUppoint}</td>
+                                    <td style={{ "color": "red", "fontWeight": "bold" }}>{dateFormat(data.createdAt, "mmmm dS, yyyy")}</td>
+                                    <td style={{ "color": "red", "fontWeight": "bold" }}>{dateFormat(data.bookAt, "mmmm dS, yyyy")}</td>
+                                    <td></td>
                                 </tr>
-                                </>
+                            </>
                                 :
                                 <>
                                     <tr>
@@ -176,25 +176,25 @@ const MyBookings = () => {
                                         <td>{data.pickUppoint}</td>
                                         <td>{dateFormat(data.createdAt, "mmmm dS, yyyy")}</td>
                                         <td>{dateFormat(data.bookAt, "mmmm dS, yyyy")}</td>
-                        { user && user.roles === 'admin' ? <></> :
+                                        {user && user.roles === 'admin' ? <></> :
 
-                                        (new Date().getTime() + 86400000 <= new Date(data.bookAt).getTime()) ? <td><Button className='btn btn-danger' onClick={() => { cancelBooking(data) }}>Cancel Tour</Button></td> : <td>-</td>
-                        }
+                                            (new Date().getTime() + 86400000 <= new Date(data.bookAt).getTime()) ? <td><Button className='btn btn-danger' onClick={() => { cancelBooking(data) }}>Cancel Tour</Button></td> : <td>-</td>
+                                        }
                                     </tr>
                                 </>
-                    }
+                            }
 
-                            </tbody>
-                            )
-            })}
-                        </table>
-                        <Pagination
-        className="pagination-bar"
-        currentPage={currentPage}
-        totalCount={mybooks.length}
-        pageSize={PageSize}
-        onPageChange={page => setCurrentPage(page)}
-      />
+                        </tbody>
+                    )
+                })}
+            </table>
+            <Pagination
+                className="pagination-bar"
+                currentPage={currentPage}
+                totalCount={mybooks.length}
+                pageSize={PageSize}
+                onPageChange={page => setCurrentPage(page)}
+            />
         </div >
 
     )

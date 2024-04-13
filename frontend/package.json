@@ -6,6 +6,7 @@
     "axios": "^1.6.4",
     "bootstrap": "^5.3.2",
     "dateformat": "^5.0.3",
+    "env-cmd": "^10.1.0",
     "install": "^0.13.0",
     "json": "^11.0.0",
     "razorpay": "^0.0.0",
@@ -29,7 +30,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "env-cmd -f .env react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -51,5 +52,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5",
+    "react-error-overlay": "^6.0.9"
   }
 }

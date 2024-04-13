@@ -14,8 +14,8 @@ import ReactStars from 'react-rating-stars-component'
 import { Button } from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify';
 
-
 const TourDetails = () => {
+   // require('dotenv').config()
    const { id } = useParams()
    const reviewMsgRef = useRef('')
    const [tourRating, setTourRating] = useState(null)
@@ -24,16 +24,14 @@ const TourDetails = () => {
    const [pause, setPause] = useState(false)
    const { user } = useContext(AuthContext)
 
-   const { photo, title, desc, price, reviews, city, address, distance, maxGroupSize,pickUppoint } = tour
+   const { photo, title, desc, price, reviews, city, address, distance, maxGroupSize, pickUppoint } = tour
 
    const { totalRating, avgRating } = calculateAvgRating(reviews)
 
    const options = { day: 'numeric', month: 'long', year: 'numeric' }
+   console.log(process.env.REACT_APP_WEATHER_KEY)
    let weather = {
-      apiKey: "192325ca42d869f638a1b6c888ccb104",
-      // apiKey: "899775a68a9f80c7844d1b62fd302bec"
-      // apiKey:"778113253df220e699096e92647c38be"
-      // apiKey: "dab439211993e605430a1ff8e028db24"
+      apiKey: process.env.REACT_APP_WEATHER_KEY,
 
    }
    //   https://home.openweathermap.org/api_keys
@@ -86,8 +84,6 @@ const TourDetails = () => {
 
 
    useEffect(() => {
-      // console.log(weather.apiKey)
-      // console.log(city)
       if (city != undefined) {
 
          fetch(`https://api.openweathermap.org/data/2.5/forecast?appid=${weather.apiKey}&q=${city}`).then((resp) => {
@@ -98,13 +94,13 @@ const TourDetails = () => {
          }).then((resp) => {
             const weatherdata = resp;
             setWeatherData(weatherdata.list)
-   
+
          }).catch((err) => {
             console.log("something got error", err);
          })
       }
 
-   },[city])
+   }, [city])
    const navigate = useNavigate();
    const submitHandler = async e => {
       e.preventDefault()
@@ -185,7 +181,6 @@ const TourDetails = () => {
    }, [tour])
 
    const ratingChanged = (newRating) => {
-      // console.log(newRating);
       setTourRating(newRating)
    };
 
@@ -193,7 +188,6 @@ const TourDetails = () => {
       var answer = window.confirm("Are you sure you want to Delete Tour?");
       if (answer) {
          try {
-            // console.log(tour);
             const res = await fetch(`${BASE_URL}/tours/${tour._id}`, {
                method: 'delete',
                credentials: 'include'
@@ -306,9 +300,6 @@ const TourDetails = () => {
                         </Row>
                         <br></br>
                         <Row>
-
-                           {/* </Row>{((weatherData && weatherData.length !== 0) ?
-                           //<> */}
                            <Col>{weatherData[0]?.weather[0]?.description}</Col>
                            <Col>{weatherData[5]?.weather[0]?.description}</Col>
                            <Col>{weatherData[10]?.weather[0]?.description}</Col>
@@ -317,9 +308,6 @@ const TourDetails = () => {
                            <Col>{weatherData[25]?.weather[0]?.description}</Col>
                            <Col>{weatherData[30]?.weather[0]?.description}</Col>
                            <Col>{weatherData[35]?.weather[0]?.description}</Col>
-                           {/* </> :
-                           <></>)
-                        } */}
                         </Row>
                      </div>
                   </Col>
@@ -333,19 +321,8 @@ const TourDetails = () => {
                   <Col lg={user ? ((user.roles === 'user') ? 8 : 12) : 12}>
                      <div className="tour__content">
                         <img src={photo} alt="" />
-                        {/* {user.roles === 'admin' ?
-                  <Button onClick={AddTour}>Add Tour</Button>
-                  : 
-                  <></>} */}
-                        {/* {(user && user.roles === 'admin' ?  <Button onClick={AddTour}>Add Tour</Button> : <></>)} */}
                         {(user ?
                            (user.roles === 'admin' ?
-                              // <div className="review__input">
-                              //    <input type="text" ref={reviewMsgRef} placeholder='share your thoughts' required />
-                              //    <button className='btn primary__btn text-white' type='submit'>
-                              //       Submit
-                              //    </button>
-                              // </div>
                               <>
                                  <Container>
                                     <p><Button onClick={UpdateTour}>Update Tour</Button>       <Button className="btn btn-danger" onClick={DeleteTour}>Delete Tour</Button> {tour.isPaused === false ? <Button className="btn btn-warning" onClick={pauseTour}>Pause Bookings</Button> : <Button className="btn btn-warning" onClick={unpauseTour}>unPause Bookings</Button>}
@@ -385,11 +362,6 @@ const TourDetails = () => {
 
                            <Form onSubmit={submitHandler}>
                               <div className="d-flex align-items-center gap-3 mb-4 rating__group">
-                                 {/* <span onClick={() => setTourRating(1)}>1 <i class='ri-star-s-fill'></i></span>
-         <span onClick={() => setTourRating(2)}>2 <i class='ri-star-s-fill'></i></span>
-         <span onClick={() => setTourRating(3)}>3 <i class='ri-star-s-fill'></i></span>
-         <span onClick={() => setTourRating(4)}>4 <i class='ri-star-s-fill'></i></span>
-         <span onClick={() => setTourRating(5)}>5 <i class='ri-star-s-fill'></i></span> */}
                                  <ReactStars
                                     count={5}
                                     onChange={ratingChanged}

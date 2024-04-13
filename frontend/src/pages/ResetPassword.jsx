@@ -94,7 +94,6 @@ const ResetPassword = () => {
           },5000);
            
       } catch (err) {
-         //  dispatch({type:"LOGIN_FAILURE", payload:err.message})
       }
    }
 
