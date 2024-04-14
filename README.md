@@ -16,6 +16,10 @@ Travello is a web application designed to facilitate tour booking, management, a
 - **Review Tours**: Leave reviews for booked tours and after the tour has ended.
 - **Cancel Booking**: Users can cancel their bookings, with restrictions if the tour is less than 1 day away.
 
+<figure class="video_container">
+  <iframe src="https://drive.google.com/file/d/1aNFr3oomh2aMMT0022Xd1XPWyRLz23Vq/view?usp=drive_link" frameborder="0" allowfullscreen="true"> 
+</iframe>
+</figure>
 ### Admin Features
 
 - **Tour Management**: Admins can add, update, delete, pause/unpause tours.
