@@ -24,6 +24,7 @@ const MyBookings = () => {
                 headers: {
                     'content-type': 'application/json'
                 },
+                credentials: 'include',
             })
             const result = await res.json()
             setmybooks(result.data)
