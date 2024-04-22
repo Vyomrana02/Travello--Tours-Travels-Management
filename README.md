@@ -54,7 +54,7 @@ To run the application locally, follow these steps:
 
 3. Set up environment variables: Create a .env file in the root directory and add the necessary environment variables, such as database connection string, API keys, etc
    
-4. Start the development server:
+4. Start the development server:(for both backend and frontend use below command on seperate terminals)
 
    ```bash
    npm start
