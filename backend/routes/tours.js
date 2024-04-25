@@ -3,27 +3,38 @@ import { createTour, deleteTour, getAllTour, getFeaturedTour, getSingleTour, get
 
 import { verifyAdmin } from '../utils/verifyToken.js'
 
-import multer from 'multer'
+// import multer from 'multer'
 
-const storage = multer.diskStorage({
-    destination: function(req,file,cb){
-        return cb(null,"../frontend/public/uploads")
-    },
-    filename:function(req,file,cb){
-        return cb(null,`${Date.now()}_${file.originalname}`)
-    }
-})
+// const storage = multer.diskStorage({
+//     destination: function(req,file,cb){
+//         return cb(null,"../frontend/public/uploads")
+//     },
+//     filename:function(req,file,cb){
+//         return cb(null,`${Date.now()}_${file.originalname}`)
+//     }
+// })
 
-const upload =  multer({storage})
+// const upload =  multer({storage})
+// const router = express.Router()
+
+// //Create new tour 
+// // router.post('/', verifyAdmin, createTour)
+// router.post('/',upload.single('photo'),verifyAdmin,createTour)
+
+
+// //Update tour 
+// router.put('/:id',upload.single('photo'), updateTour)
+
 const router = express.Router()
 
 //Create new tour 
 // router.post('/', verifyAdmin, createTour)
-router.post('/',upload.single('photo'),verifyAdmin,createTour)
+router.post('/',verifyAdmin,createTour)
 
 
 //Update tour 
-router.put('/:id',upload.single('photo'), updateTour)
+router.put('/:id', updateTour)
+
 
 //Delete tour 
 router.delete('/:id', verifyAdmin, deleteTour)
