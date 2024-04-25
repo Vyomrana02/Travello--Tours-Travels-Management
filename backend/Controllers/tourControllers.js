@@ -16,14 +16,12 @@ export const createTour = async (req, res) => {
    }
 }
 
+
+
 //Update Tour
 export const updateTour = async (req, res) => {
    const id = req.params.id
    console.log(req.body)
-   console.log(id)
-   if (req.file) {
-      req.body.photo = "/uploads/" + req.file.filename;
-  }
    try {
 
       const updatedTour = await Tour.findByIdAndUpdate(id, {
