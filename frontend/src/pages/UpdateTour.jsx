@@ -5,7 +5,8 @@ import axios from 'axios'
 import { useNavigate, useLocation } from 'react-router-dom'
 const UpdateTour = (tours) => {
   const navigate = useNavigate();
-  const [photos,changephotos] = useState(false);
+  const [photos, changephotos] = useState(false);
+  const [photoing, setPhoto] = useState("");
   const location = useLocation();
   const [tour, setTour] = useState({
     title: location.state.title,
@@ -17,53 +18,71 @@ const UpdateTour = (tours) => {
     desc: location.state.desc,
     reviews: [],
     photo: location.state.photo,
-    pickUppoint:location.state.pickUppoint
+    pickUppoint: location.state.pickUppoint
   })
   const [featured, setfeatured] = React.useState(location.state.featured);
   const handleCheckBox = (event) => {
     setfeatured(current => !current);
   }
-  // const [tour, setTour] = useStat  e({})
   const handleChange = e => {
     setTour(prev => ({ ...prev, [e.target.id]: e.target.value }))
+    console.log(tour)
   }
+
   const handleSubmit = async e => {
-    console.log(tour);
     e.preventDefault()
-    let formData = new FormData();
-    formData.append("title", tour.title)
-    formData.append("city", tour.city)
-    formData.append("address", tour.address)
-    formData.append("distance", tour.distance)
-    formData.append("price", tour.price)
-    formData.append("maxGroupSize", tour.maxGroupSize)
-    formData.append("desc", tour.desc)
-    formData.append("pickUppoint",tour.pickUppoint)
-    if(photos){
-      formData.append("photo", tour.photo)
-    }
-    formData.append("featured",featured)
-   
-    axios.put(`${BASE_URL}/tours/${location.state._id}`, formData, {
-      withCredentials: true, headers: {
-        'Access-Control-Allow-Origin': 'true',
-      }
-    })
+    if (photos ) {
+      const data = new FormData();
+      data.append("file", photoing);
+      data.append("upload_preset", "travello");
+      data.append("cloud_name", "donunx8mw");
+      fetch("https://api.cloudinary.com/v1_1/donunx8mw/image/upload", {
+        method: "post",
+        body: data
+      })
+        .then(res => res.json())
+        .then(async (data) => {
+          console.log(data.url)
+          await setTour(prev => ({ ...prev, photo: data.url}))
+          var sends = tour;
+          sends.photo = data.url
+          console.log(sends)
+          const res = await fetch(`${BASE_URL}/tours/${location.state._id}`, {
+            method: 'put',
+            headers: {
+              'content-type': 'application/json'
+            },
+            body: JSON.stringify(sends)
+          })
+        })
+        .then((res) => {
+          navigate('/tours')
+        }).catch(err => {
+          console.log(err, "err");
+        })
+    } else {
+      console.log("INs")
+      const res = await fetch(`${BASE_URL}/tours/${location.state._id}`, {
+        method: 'put',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify(tour)
+      })
       .then((res) => {
-        console.log(res.data)
         navigate('/tours')
       }).catch(err => {
         console.log(err, "err");
       })
-      
+    }
+
   }
   const handlePhoto = e => {
     changephotos(true);
-    setTour(prev => ({ ...prev, [e.target.id]: e.target.files[0] }))
-    console.log(tour)
+    setPhoto(e.target.files[0])
   }
 
- 
+
 
   return (
 
@@ -72,15 +91,15 @@ const UpdateTour = (tours) => {
         <label for="exampleFormControlInput1" className="form-label">Title</label>
         <input type="text" className="form-control" placeholder={location.state.title} id="title" onChange={handleChange} />
       </div> <div className='row'>
-      <div className="mb-1 col-6">
-        <label for="exampleFormControlInput1" className="form-label">City</label>
-        <input type="text" className="form-control" placeholder={location.state.city} id="city" onChange={handleChange} required/>
-      </div>
-      
-      <div className="mb-1 col-6">
-        <label for="exampleFormControlInput1" className="form-label">Pick Up point</label>
-        <input type="text" className="form-control" placeholder={location.state.pickUppoint} id="pickUppoint" onChange={handleChange} required/>
-      </div>
+        <div className="mb-1 col-6">
+          <label for="exampleFormControlInput1" className="form-label">City</label>
+          <input type="text" className="form-control" placeholder={location.state.city} id="city" onChange={handleChange} required />
+        </div>
+
+        <div className="mb-1 col-6">
+          <label for="exampleFormControlInput1" className="form-label">Pick Up point</label>
+          <input type="text" className="form-control" placeholder={location.state.pickUppoint} id="pickUppoint" onChange={handleChange} required />
+        </div>
       </div>
       <div className='row'>
         <div className="mb-3 col-6">
@@ -109,8 +128,8 @@ const UpdateTour = (tours) => {
       <div className="form-check">
         <input className="form-check-input" type="checkbox" value={featured} onChange={handleCheckBox}
           id="subscribe"
-          name="subscribe" 
-          defaultChecked={featured}/>
+          name="subscribe"
+          defaultChecked={featured} />
         <label className="form-check-label" for="flexCheckDefault">
           Featured
         </label>
