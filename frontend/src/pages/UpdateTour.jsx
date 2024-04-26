@@ -31,7 +31,7 @@ const UpdateTour = (tours) => {
 
   const handleSubmit = async e => {
     e.preventDefault()
-    if (photos ) {
+    if (photos == true ) {
       const data = new FormData();
       data.append("file", photoing);
       data.append("upload_preset", "travello");
@@ -42,31 +42,33 @@ const UpdateTour = (tours) => {
       })
         .then(res => res.json())
         .then(async (data) => {
+          var urls = data.url
           console.log(data.url)
-          await setTour(prev => ({ ...prev, photo: data.url}))
           var sends = tour;
           sends.photo = data.url
           console.log(sends)
+          console.log(sends.photo)
           const res = await fetch(`${BASE_URL}/tours/${location.state._id}`, {
             method: 'put',
             headers: {
               'content-type': 'application/json'
             },
+            credentials:'include',
             body: JSON.stringify(sends)
           })
-        })
-        .then((res) => {
-          navigate('/tours')
-        }).catch(err => {
-          console.log(err, "err");
+          .then((res) => {
+            navigate('/tours')
+          }).catch(err => {
+            console.log(err, "err");
+          })
         })
     } else {
-      console.log("INs")
       const res = await fetch(`${BASE_URL}/tours/${location.state._id}`, {
         method: 'put',
         headers: {
           'content-type': 'application/json'
         },
+        credentials:'include',
         body: JSON.stringify(tour)
       })
       .then((res) => {
