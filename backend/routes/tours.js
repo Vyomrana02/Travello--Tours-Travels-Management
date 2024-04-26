@@ -33,7 +33,7 @@ router.post('/',verifyAdmin,createTour)
 
 
 //Update tour 
-router.put('/:id', updateTour)
+router.put('/:id',verifyAdmin, updateTour)
 
 
 //Delete tour 
