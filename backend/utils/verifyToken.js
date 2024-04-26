@@ -40,10 +40,10 @@ export const verifymUser = (req, res, next) => {
 
 export const verifyAdmin = (req, res, next) => {
    verifyToken(req, res, next, () => {
-      if (req.user.id === req.params.id && req.user.roles === 'admin') {
+      if (req.user.roles === 'admin') {
          next()
       } else {
-         return res.status(401).json({ success: false, message: "You are not authenticated" })
+         return res.status(401).json({ success: false, message: "You are not authorize" })
       }
    })
 } 
