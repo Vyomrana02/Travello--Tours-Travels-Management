@@ -3,11 +3,8 @@ import Tour from '../models/Tour.js'
 
 export const createTour = async (req, res) => {
    var newTour = new Tour(req.body)
-   console.log(req);
-   console.log(req.file,req.body);
-   newTour.photo = "/uploads/" + req.file.filename;
+   // console.log(req.body)
    try {
-      console.log(newTour)
       const savedTour = await newTour.save()
 
       res.status(200).json({ success: true, message: 'Successfully created', data: {savedTour} })
@@ -21,7 +18,7 @@ export const createTour = async (req, res) => {
 //Update Tour
 export const updateTour = async (req, res) => {
    const id = req.params.id
-   console.log(req.body)
+   // console.log(req.body)
    try {
 
       const updatedTour = await Tour.findByIdAndUpdate(id, {
