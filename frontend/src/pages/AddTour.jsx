@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 const AddTour = () => {
   const navigate = useNavigate();
+  const [photoing, setPhoto] = useState("");
   const [tour, setTour] = useState({
     title: '',
     city: '',
@@ -24,10 +25,14 @@ const AddTour = () => {
   const handleChange = e => {
     setTour(prev => ({ ...prev, [e.target.id]: e.target.value }))
   }
+  
+  const handlePhoto = e => {
+    setPhoto(e.target.files[0])
+  }
   const handleSubmit = async e => {
     console.log(tour);
     e.preventDefault()
-    if (tour.title == '' || tour.city == '' || tour.distance == 0 || tour.price == 0 || tour.maxGroupSize == 0 || tour.desc == "" || tour.photo == "" || tour.pickUppoint == '') {
+    if (tour.title == '' || tour.city == '' || tour.distance == 0 || tour.price == 0 || tour.maxGroupSize == 0 || tour.desc == "" ||  tour.pickUppoint == '') {
       toast.error('📋✏️ Please Fill out all details 😊', {
         position: "top-center",
         autoClose: 3000,
@@ -51,16 +56,49 @@ const AddTour = () => {
       formData.append("photo", tour.photo)
       formData.append("pickUppoint", tour.pickUppoint)
       console.log(formData)
-      axios.post(`${BASE_URL}/tours/`, formData, {
-        withCredentials: true, headers: {
-          'Access-Control-Allow-Origin': 'true',
-        }
+      // axios.post(`${BASE_URL}/tours/`, formData, {
+      //   withCredentials: true, headers: {
+      //     'Access-Control-Allow-Origin': 'true',
+      //   }
+      // })
+      const data = new FormData();
+      data.append("file", photoing);
+      data.append("upload_preset", "travello");
+      data.append("cloud_name", "donunx8mw");
+      fetch("https://api.cloudinary.com/v1_1/donunx8mw/image/upload", {
+        method: "post",
+        body: data
       })
-        .then((res) => {
-          console.log(res.data)
-          navigate('/tours')
-        }).catch(err => {
-          console.log(err, "err");
+        .then(res => res.json())
+        .then(async (data) => {
+          console.log(data.url)
+          await setTour(prev => ({ ...prev, photo: data.url}))
+          // let formData = new FormData();
+          // formData.append("title", tour.title)
+          // formData.append("city", tour.city)
+          // formData.append("address", String(nights) + String("N/") + String(days) + String("D"))
+          // formData.append("distance", tour.distance)
+          // formData.append("price", tour.price)
+          // formData.append("maxGroupSize", tour.maxGroupSize)
+          // formData.append("desc", tour.desc)
+          // formData.append("photo", tour.photo)
+          // formData.append("pickUppoint", tour.pickUppoint)
+          // console.log(formData)
+          var sends = tour;
+          sends.photo = data.url
+          sends.address = String(nights) + String("N/") + String(days) + String("D")
+          console.log(sends)
+          await fetch(`${BASE_URL}/tours/`, {
+            method: 'post',
+            headers: {
+              'content-type': 'application/json'
+            },
+            credentials:'include',
+            body: JSON.stringify(sends)
+          }).then((res)=>{
+            console.log(res.json())
+            navigate("/tours")
+          })
         })
     } else {
       toast.error('days should be 1 greater than nights 😊', {
@@ -74,9 +112,6 @@ const AddTour = () => {
       });
       return
     }
-  }
-  const handlePhoto = e => {
-    setTour(prev => ({ ...prev, [e.target.id]: e.target.files[0] }))
   }
   return (
 
